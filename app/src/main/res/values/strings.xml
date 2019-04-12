@@ -13,4 +13,5 @@
         completions."
     </string>
     <string name="title_activity_main_login">MainLoginActivity</string>
+    <string name="logout">logout</string>
 </resources>

@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -24,21 +26,39 @@ public class MainLoginActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 16556;
     List<AuthUI.IdpConfig> providers;
-
+    FirebaseUser user = null;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
         FirebaseApp.initializeApp(this);
-        // Init Providers
+        mAuth = FirebaseAuth.getInstance();
 
+        // Init Providers
         providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
+        // Init Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Actions - Buttons
+
+        setButtonListeners();
+
+        // User Control
+        user = mAuth.getCurrentUser();
+        if (user == null) {
+            showSignInOptions();
+        } else {
+            afterSignIn();
+        }
+
+    }
+
+    private void setButtonListeners() {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +67,15 @@ public class MainLoginActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        showSignInOptions();
+
+        Button logoutButton = findViewById(R.id.button2);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                showSignInOptions();
+            }
+        });
     }
 
     @Override
@@ -58,15 +86,17 @@ public class MainLoginActivity extends AppCompatActivity {
 
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-
                 // GET USER
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+                user = mAuth.getCurrentUser();
                 // SHOW EMAIL
-
                 Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
+                afterSignIn();
             } else {
-                Toast.makeText(this, response.getError().getMessage(), Toast.LENGTH_LONG).show();
+                if (response != null) {
+                    Toast.makeText(this, response.getError().getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+                showSignInOptions();
             }
         }
 
@@ -82,4 +112,8 @@ public class MainLoginActivity extends AppCompatActivity {
                 , SIGN_IN_REQUEST_CODE);
     }
 
+    private void afterSignIn() {
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(user.getEmail());
+    }
 }
