@@ -2,15 +2,15 @@ package com.cppandi.rirl.models;
 
 class Location {
     private Float lat;
-    private Float lang;
+    private Float lon;
     private String title;
 
     public Location() {
     }
 
-    public Location(Float lat, Float lang, String title) {
+    public Location(Float lat, Float lon, String title) {
         this.lat = lat;
-        this.lang = lang;
+        this.lon = lon;
         this.title = title;
     }
 
@@ -23,11 +23,11 @@ class Location {
     }
 
     public Float getLang() {
-        return lang;
+        return lon;
     }
 
-    public void setLang(Float lang) {
-        this.lang = lang;
+    public void setLang(Float lon) {
+        this.lon = lon;
     }
 
     public String getTitle() {
