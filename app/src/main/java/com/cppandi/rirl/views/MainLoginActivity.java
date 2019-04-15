@@ -121,22 +121,5 @@ public class MainLoginActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.textView);
         textView.setText(user.getEmail());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("characters")
-                .document("asd")
-                .collection("items")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Prueba documentos", document.getId() + " => " + document.getData().entrySet());
-
-                            }
-                        }
-                    }
-                });
-
     }
 }
