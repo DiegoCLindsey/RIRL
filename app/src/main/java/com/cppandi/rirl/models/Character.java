@@ -5,16 +5,6 @@ public class Character {
     private String user_id;
     private String name;
 
-
-    public Character() {
-    }
-
-    public Character(String id, String user_id, String name) {
-        this.id = id;
-        this.user_id = user_id;
-        this.name = name;
-    }
-
     public String getId() {
         return id;
     }
@@ -37,5 +27,13 @@ public class Character {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Character(String user_id, String name) {
+        this.user_id = user_id;
+        this.name = name;
+    }
+
+    public Character() {
     }
 }
