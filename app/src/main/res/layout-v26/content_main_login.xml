@@ -20,7 +20,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:orientation="vertical">
 
 
             <TextView
@@ -37,9 +39,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingBottom="50dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,10 +54,9 @@
 
                 <Button
                     android:id="@+id/newgame"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="@dimen/topMarginWeight"
                     android:text="@string/newgame" />
 
 
@@ -64,10 +69,9 @@
 
                 <Button
                     android:id="@+id/options"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="@dimen/topMarginWeight"
                     android:text="@string/opciones" />
 
 
@@ -80,10 +84,9 @@
 
                 <Button
                     android:id="@+id/joingame"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="@dimen/topMarginWeight"
                     android:text="@string/joingame" />
 
 

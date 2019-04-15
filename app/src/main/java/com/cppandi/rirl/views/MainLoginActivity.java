@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,7 +29,8 @@ import java.util.List;
 
 public class MainLoginActivity extends AppCompatActivity {
 
-    private static final int SIGN_IN_REQUEST_CODE = 16556;
+    private static final int SIGN_IN_REQUEST_CODE = 16526;
+    private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
     List<AuthUI.IdpConfig> providers;
     FirebaseUser user = null;
     private FirebaseAuth mAuth;
@@ -64,23 +64,23 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
     private void setButtonListeners() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent maps = new Intent(view.getContext(), MapsActivity2.class);
-                startActivity(maps);
-            }
-        });
-
-        Button logoutButton = findViewById(R.id.button2);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        Button newGameButton = findViewById(R.id.newgame);
+        newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                showSignInOptions();
+                startActivityForResult(new Intent(v.getContext(), NewGameForm.class), NEW_GAME_FORM_REQUEST_CODE);
             }
         });
+//
+//
+//        Button logoutButton = findViewById(R.id.button2);
+//        logoutButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mAuth.signOut();
+//                showSignInOptions();
+//            }
+//        });
     }
 
     @Override
@@ -120,23 +120,6 @@ public class MainLoginActivity extends AppCompatActivity {
     private void afterSignIn() {
         TextView textView = findViewById(R.id.textView);
         textView.setText(user.getEmail());
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("characters")
-                .document("asd")
-                .collection("items")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Prueba documentos", document.getId() + " => " + document.getData().entrySet());
-
-                            }
-                        }
-                    }
-                });
 
     }
 }

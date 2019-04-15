@@ -3,4 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <item format="float" name="marginWeight" type="dimen">0.2</item>
+    <item format="float" name="topMarginWeight" type="dimen">0.5</item>
+    <item format="float" name="buttons" type="dimen">0.3</item>
 </resources>
