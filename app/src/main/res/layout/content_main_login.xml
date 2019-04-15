@@ -1,61 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".views.MainLoginActivity"
-    tools:showIn="@layout/activity_main_login">
+    tools:showIn="@layout/activity_main_login" >
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:paddingTop="16dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="132dp"
-            android:textAllCaps="true"
-            android:textSize="16sp" />
-
-        <RelativeLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/TopMarginWeight">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+            <Space android:layout_weight="@integer/MarginWeight" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:autoSizeTextType="uniform"
+                android:text="@string/app_name" />
+
+            <Space android:layout_weight="@integer/MarginWeight" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/TopMarginWeight">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/Buttons">
+
+            <Space android:layout_weight="@integer/MarginWeight" />
 
             <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
+                android:id="@+id/newgame"
+                android:layout_weight="@integer/TopMarginWeight"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginBottom="46dp"
-                android:text="Logout" />
+                android:text="@string/newgame" />
+
+            <Space android:layout_weight="@integer/MarginWeight" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/Buttons">
+
+            <Space android:layout_weight="@integer/MarginWeight" />
 
             <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/joingame"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="187dp"
-                android:layout_marginRight="187dp"
-                android:layout_marginBottom="49dp" />
-        </RelativeLayout>
+                android:layout_gravity="center"
+                android:layout_weight="@integer/TopMarginWeight"
+                android:text="@string/joingame" />
 
+            <Space android:layout_weight="@integer/MarginWeight" />
 
-    </LinearLayout>
+        </TableRow>
 
-</android.support.design.widget.CoordinatorLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/Buttons">
+
+            <Space android:layout_weight="@integer/MarginWeight" />
+
+            <Button
+                android:id="@+id/options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="@integer/TopMarginWeight"
+                android:text="@string/opciones" />
+
+            <Space android:layout_weight="@integer/MarginWeight" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="@integer/TopMarginWeight" >
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>

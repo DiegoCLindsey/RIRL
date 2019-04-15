@@ -20,4 +20,17 @@
     <style name="SignInTheme" parent="AppTheme">
         <item name="android:windowBackground">@android:color/white</item>
     </style>
+
+    <integer name="MarginWeight">0.2</integer>
+    <integer name="TopMarginWeight">0.5</integer>
+    <integer name="Buttons">0.3</integer>
+
+    <style name="AppTheme.NoActionBar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
