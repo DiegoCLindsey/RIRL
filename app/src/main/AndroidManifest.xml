@@ -31,8 +31,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".views.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:name=".views.MapsActivity2"
+            android:label="@string/title_activity_maps2"></activity>
         <!-- <activity -->
         <!-- android:name=".MainLoginActivity" -->
         <!-- android:label="@string/title_activity_main_login" -->
