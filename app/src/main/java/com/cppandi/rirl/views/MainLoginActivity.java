@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +63,13 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
     private void setButtonListeners() {
+        Button newGameButton = findViewById(R.id.newgame);
+        newGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), NewGameForm.class));
+            }
+        });
 //
 //
 //        Button logoutButton = findViewById(R.id.button2);

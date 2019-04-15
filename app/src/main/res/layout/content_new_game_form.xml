@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".new_game_form"
+    tools:context=".views.NewGameForm"
     tools:showIn="@layout/activity_new_game_form">
 
     <LinearLayout
