@@ -29,7 +29,8 @@ import java.util.List;
 
 public class MainLoginActivity extends AppCompatActivity {
 
-    private static final int SIGN_IN_REQUEST_CODE = 16556;
+    private static final int SIGN_IN_REQUEST_CODE = 16526;
+    private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
     List<AuthUI.IdpConfig> providers;
     FirebaseUser user = null;
     private FirebaseAuth mAuth;
@@ -67,7 +68,7 @@ public class MainLoginActivity extends AppCompatActivity {
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), NewGameForm.class));
+                startActivityForResult(new Intent(v.getContext(), NewGameForm.class), NEW_GAME_FORM_REQUEST_CODE);
             }
         });
 //
