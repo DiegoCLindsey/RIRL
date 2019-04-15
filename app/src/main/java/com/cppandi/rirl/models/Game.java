@@ -10,17 +10,17 @@ public class Game {
     private GameState state;
     private Date creation_date;
     private Date finish_date;
-    private List<Character> characters;
+    private List<String> character_ids;
     private Location creation_location;
     private List<GameLocation> locations;
 
-    public Game(String master_id, String title, GameState state, Date creation_date, Date finish_date, List<Character> characters, Location creation_location, List<GameLocation> locations) {
+    public Game(String master_id, String title, GameState state, Date creation_date, Date finish_date, List<String> character_ids, Location creation_location, List<GameLocation> locations) {
         this.master_id = master_id;
         this.title = title;
         this.state = state;
         this.creation_date = creation_date;
         this.finish_date = finish_date;
-        this.characters = characters;
+        this.character_ids = character_ids;
         this.creation_location = creation_location;
         this.locations = locations;
     }
@@ -76,12 +76,12 @@ public class Game {
         this.finish_date = finish_date;
     }
 
-    public List<Character> getCharacters() {
-        return characters;
+    public List<String> getCharacters() {
+        return character_ids;
     }
 
-    public void setCharacters(List<Character> characters) {
-        this.characters = characters;
+    public void setCharacters(List<String> character_ids) {
+        this.character_ids = character_ids;
     }
 
     public Location getCreation_location() {
