@@ -1,7 +1,5 @@
 package com.cppandi.rirl.models;
 
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +11,94 @@ public class Game {
     private Date creation_date;
     private Date finish_date;
     private List<Character> characters;
-    private MarkerOptions creation_location;
-    // TODO private List<Location> locations;
-    // TODO private List<Event> events;
+    private Location creation_location;
+    private List<GameLocation> locations;
+
+    public Game(String master_id, String title, GameState state, Date creation_date, Date finish_date, List<Character> characters, Location creation_location, List<GameLocation> locations) {
+        this.master_id = master_id;
+        this.title = title;
+        this.state = state;
+        this.creation_date = creation_date;
+        this.finish_date = finish_date;
+        this.characters = characters;
+        this.creation_location = creation_location;
+        this.locations = locations;
+    }
+
+    public Game() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getMaster_id() {
+        return master_id;
+    }
+
+    public void setMaster_id(String master_id) {
+        this.master_id = master_id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    public Date getCreation_date() {
+        return creation_date;
+    }
+
+    public void setCreation_date(Date creation_date) {
+        this.creation_date = creation_date;
+    }
+
+    public Date getFinish_date() {
+        return finish_date;
+    }
+
+    public void setFinish_date(Date finish_date) {
+        this.finish_date = finish_date;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
+    }
+
+    public Location getCreation_location() {
+        return creation_location;
+    }
+
+    public void setCreation_location(Location creation_location) {
+        this.creation_location = creation_location;
+    }
+
+    public List<GameLocation> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<GameLocation> locations) {
+        this.locations = locations;
+    }
+// TODO private List<Event> events;
 
 }
