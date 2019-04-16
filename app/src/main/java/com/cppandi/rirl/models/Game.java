@@ -28,6 +28,10 @@ public class Game {
     public Game() {
     }
 
+    public Game(String title){
+        this.title = title;
+    }
+
     public String getId() {
         return id;
     }
