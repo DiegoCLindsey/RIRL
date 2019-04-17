@@ -123,13 +123,8 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 mLastClickTime = SystemClock.elapsedRealtime();
-                                Context context = v.getContext();
-                                Intent intent = new Intent(context, MapsActivity.class);
                                 int pos = rvGames.getChildLayoutPosition(v);
-                                Bundle extras = new Bundle();
-                                extras.putString("game_id", games.get(pos).getId());
-                                intent.putExtras(extras);
-                                context.startActivity(intent);
+                                openGame(games.get(pos).getId(), v.getContext());
                             }
 
                             @Override
@@ -174,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                IdpResponse response = IdpResponse.fromResultIntent(data);
+                openGame(data.getStringExtra("game_id"), this);
             }
         }
 
@@ -196,6 +191,13 @@ public class MainActivity extends AppCompatActivity {
         setRecycleView();
     }
 
+    private void openGame(String game, Context context) {
+        Intent intent = new Intent(context, MapsActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString("game_id", game);
+        intent.putExtras(extras);
+        context.startActivity(intent);
+    }
     // Set Menu
 
     @Override

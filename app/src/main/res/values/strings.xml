@@ -14,7 +14,7 @@
         completions."
     </string>
     <string name="title_activity_main_login">MainLoginActivity</string>
-    <string name="logout">logout</string>
+    <string name="logout">Sign Out</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_maps2">Map</string>
     <string name="newgame">New Game</string>
