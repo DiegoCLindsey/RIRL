@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         rvGames.setAdapter(gamesAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("games").get().addOnCompleteListener(
+        db.collection("games").limit(50).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
