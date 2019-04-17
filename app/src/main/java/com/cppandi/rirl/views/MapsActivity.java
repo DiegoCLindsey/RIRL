@@ -1,7 +1,8 @@
 package com.cppandi.rirl.views;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.cppandi.rirl.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +24,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Log.d("prueba", "onCreate: " + getIntent().getExtras().getString("game_id"));
     }
 
 

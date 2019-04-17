@@ -1,8 +1,7 @@
 package com.cppandi.rirl.controllers;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,12 @@ import android.widget.TextView;
 
 import com.cppandi.rirl.R;
 import com.cppandi.rirl.models.Game;
-import com.cppandi.rirl.views.MapsActivity;
 
 import java.util.List;
 
 public class GamesAdapter extends
         RecyclerView.Adapter<GamesAdapter.ViewHolder> {
 
-    // Double click prevention
-    private long mLastClickTime = 0;
     // Store a member variable for the contacts
     private List<Game> mGames;
 
@@ -30,8 +26,9 @@ public class GamesAdapter extends
     }
 
     // Usually involves inflating a layout from XML and returning the holder
+    @NonNull
     @Override
-    public GamesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GamesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -39,13 +36,12 @@ public class GamesAdapter extends
         View contactView = inflater.inflate(R.layout.item_game, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(GamesAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull GamesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
         Game game = mGames.get(position);
 
@@ -70,26 +66,14 @@ public class GamesAdapter extends
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
             itemGame = itemView.findViewById(R.id.item_game_layout);
             personName = itemView.findViewById(R.id.contact_name);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    Context context = v.getContext();
-                    context.startActivity(new Intent(context, MapsActivity.class));
-                    v.setEnabled(true);
 
-                }
-            });
             itemView.setClickable(true);
         }
 
