@@ -13,8 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cppandi.rirl.R;
@@ -40,12 +43,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 16526;
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
-    List<AuthUI.IdpConfig> providers;
-    FirebaseUser user = null;
+
     ArrayList<Game> games;
     GamesAdapter adapter = new GamesAdapter(games);
+    List<AuthUI.IdpConfig> providers;
+    FirebaseUser user = null;
+    // Views
+    ProgressBar progressBar;
     // Double click prevention
     private long mLastClickTime = 0;
+    // Firebase
     private FirebaseAuth mAuth;
 
     @Override
@@ -57,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+        // Init views
+        progressBar = findViewById(R.id.progressBar);
         // Init Providers
         providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -87,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            progressBar.setVisibility(View.GONE);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Game game = document.toObject(Game.class);
                                 game.setId(document.getId());
@@ -162,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
                 showSignInOptions();
             }
         }
+        if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                IdpResponse response = IdpResponse.fromResultIntent(data);
+            }
+        }
 
     }
 
@@ -179,6 +194,27 @@ public class MainActivity extends AppCompatActivity {
     private void afterSignIn() {
         // Set RecycleView
         setRecycleView();
+    }
+
+    // Set Menu
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout_button:
+                mAuth.signOut();
+                showSignInOptions();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
 
