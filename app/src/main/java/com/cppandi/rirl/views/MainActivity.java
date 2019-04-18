@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.GamesAdapter;
+import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                                 gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
 
                             }
-
                         } else {
                             Log.d("prueba", "Error getting documents: ", task.getException());
                         }
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // GET USER
                 user = mAuth.getCurrentUser();
+                UserService.getInstance().setUser(user);
                 // SHOW EMAIL
                 Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
                 afterSignIn();
