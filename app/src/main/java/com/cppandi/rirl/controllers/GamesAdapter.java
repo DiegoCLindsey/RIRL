@@ -47,7 +47,7 @@ public class GamesAdapter extends
 
         // Set item views based on your views and data model
         viewHolder.titleGame.setText(game.getTitle());
-        viewHolder.adminName.setText(game.getTitle());
+        viewHolder.adminName.setText(game.getMaster_name());
         viewHolder.locationName.setText(game.getLocationName());
         viewHolder.playersCount.setText(game.getLengthCharacters() + "/" + game.getMax_characters());
     }
