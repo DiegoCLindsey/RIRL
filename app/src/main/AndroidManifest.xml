@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".views.CreateUserActivity"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/maps_api_key" />
@@ -22,6 +24,7 @@
             android:theme="@style/AppTheme.NoActionBar.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,7 +32,7 @@
             android:name=".views.MapsActivity"
             android:label="@string/title_activity_maps2" />
         <activity
-            android:name=".views.NewGameForm"
+            android:name=".views.NewGameFormActivity"
             android:label="@string/title_activity_new_game_form"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
     </application>

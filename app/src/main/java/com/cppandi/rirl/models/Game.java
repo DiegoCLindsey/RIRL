@@ -6,40 +6,40 @@ import java.util.List;
 
 public class Game {
     private String id;
-    private String master_id;
+    private String masterId;
     private String title;
     private GameState state;
-    private Date creation_date;
-    private Date finish_date;
-    private List<String> character_ids;
+    private Date creationDate;
+    private Date finishDate;
+    private List<String> characterIds;
     private Location creation_location;
     private List<GameLocation> locations;
-    private Integer max_characters;
-    private String master_name;
+    private Integer maxCharacters;
+    private String masterName;
 
 
     // Constructors
 
 
-    public Game(String id, String master_id, String title, GameState state, Date creation_date, Date finish_date, List<String> character_ids, Location creation_location, List<GameLocation> locations, Integer max_characters, String master_name) {
+    public Game(String id, String masterId, String title, GameState state, Date creationDate, Date finishDate, List<String> characterIds, Location creation_location, List<GameLocation> locations, Integer maxCharacters, String masterName) {
         this.id = id;
-        this.master_id = master_id;
+        this.masterId = masterId;
         this.title = title;
         this.state = state;
-        this.creation_date = creation_date;
-        this.finish_date = finish_date;
-        this.character_ids = character_ids;
+        this.creationDate = creationDate;
+        this.finishDate = finishDate;
+        this.characterIds = characterIds;
         this.creation_location = creation_location;
         this.locations = locations;
-        this.max_characters = max_characters;
-        this.master_name = master_name;
+        this.maxCharacters = maxCharacters;
+        this.masterName = masterName;
     }
 
     public Game() {
-        this.character_ids = new ArrayList<>();
+        this.characterIds = new ArrayList<>();
         this.locations = new ArrayList<>();
         this.state = GameState.PREPARING;
-        this.creation_date = new Date();
+        this.creationDate = new Date();
     }
 
     public Game(String title) {
@@ -48,28 +48,28 @@ public class Game {
 
     // Auto Getter and Setters
 
-    public String getMaster_name() {
-        return master_name;
+    public String getMasterName() {
+        return masterName;
     }
 
-    public void setMaster_name(String master_name) {
-        this.master_name = master_name;
+    public void setMasterName(String masterName) {
+        this.masterName = masterName;
     }
 
-    public List<String> getCharacter_ids() {
-        return character_ids;
+    public List<String> getCharacterIds() {
+        return characterIds;
     }
 
-    public void setCharacter_ids(List<String> character_ids) {
-        this.character_ids = character_ids;
+    public void setCharacterIds(List<String> characterIds) {
+        this.characterIds = characterIds;
     }
 
-    public Integer getMax_characters() {
-        return max_characters;
+    public Integer getMaxCharacters() {
+        return maxCharacters;
     }
 
-    public void setMax_characters(Integer max_characters) {
-        this.max_characters = max_characters;
+    public void setMaxCharacters(Integer maxCharacters) {
+        this.maxCharacters = maxCharacters;
     }
 
 
@@ -81,12 +81,12 @@ public class Game {
         this.id = id;
     }
 
-    public String getMaster_id() {
-        return master_id;
+    public String getMasterId() {
+        return masterId;
     }
 
-    public void setMaster_id(String master_id) {
-        this.master_id = master_id;
+    public void setMasterId(String masterId) {
+        this.masterId = masterId;
     }
 
     public String getTitle() {
@@ -105,20 +105,20 @@ public class Game {
         this.state = state;
     }
 
-    public Date getCreation_date() {
-        return creation_date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(Date creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Date getFinish_date() {
-        return finish_date;
+    public Date getFinishDate() {
+        return finishDate;
     }
 
-    public void setFinish_date(Date finish_date) {
-        this.finish_date = finish_date;
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 
     public Location getCreation_location() {
@@ -140,7 +140,7 @@ public class Game {
     // Remaining getters
 
     public Integer getLengthCharacters() {
-        return getCharacter_ids() != null ? getCharacter_ids().size() : 0;
+        return getCharacterIds() != null ? getCharacterIds().size() : 0;
     }
 
     public String getLocationName() {

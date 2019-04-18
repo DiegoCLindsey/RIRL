@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(v.getContext(), NewGameForm.class), NEW_GAME_FORM_REQUEST_CODE);
+                startActivityForResult(new Intent(v.getContext(), NewGameFormActivity.class), NEW_GAME_FORM_REQUEST_CODE);
             }
         });
     }

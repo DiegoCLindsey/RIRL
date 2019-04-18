@@ -2,7 +2,7 @@ package com.cppandi.rirl.models;
 
 public class Character {
     private String id;
-    private String game_id;
+    private String gameId;
     private String name;
 
     public String getId() {
@@ -14,11 +14,11 @@ public class Character {
     }
 
     public String getUser_id() {
-        return game_id;
+        return gameId;
     }
 
     public void setUser_id(String game_id) {
-        this.game_id = game_id;
+        this.gameId = game_id;
     }
 
     public String getName() {
@@ -29,8 +29,8 @@ public class Character {
         this.name = name;
     }
 
-    public Character(String game_id, String name) {
-        this.game_id = game_id;
+    public Character(String gameId, String name) {
+        this.gameId = gameId;
         this.name = name;
     }
 

@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.cppandi.rirl.R;
 
-public class NewGameForm extends AppCompatActivity {
+public class NewGameFormActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
