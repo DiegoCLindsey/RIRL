@@ -1,12 +1,13 @@
 package com.cppandi.rirl.controllers;
 
+import com.cppandi.rirl.models.User;
 import com.google.firebase.auth.FirebaseUser;
 
 public class UserService {
     private static UserService sSoleInstance;
 
-    private FirebaseUser user;
-    private String userName;
+    private FirebaseUser firebaseUser;
+    private User appUser;
 
     private UserService() {
     }  //private constructor.
@@ -19,19 +20,19 @@ public class UserService {
         return sSoleInstance;
     }
 
-    public FirebaseUser getUser() {
-        return user;
+    public FirebaseUser getFirebaseUser() {
+        return firebaseUser;
     }
 
-    public void setUser(FirebaseUser user) {
-        this.user = user;
+    public void setFirebaseUser(FirebaseUser firebaseUser) {
+        this.firebaseUser = firebaseUser;
     }
 
-    public String getUserName() {
-        return userName;
+    public User getAppUser() {
+        return appUser;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAppUser(User appUser) {
+        this.appUser = appUser;
     }
 }

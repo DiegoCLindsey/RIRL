@@ -24,6 +24,7 @@ import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.GamesAdapter;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 16526;
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
+    private static final int CREATE_USER_REQUEST_CODE = 51614;
 
     ArrayList<Game> games;
-    GamesAdapter adapter = new GamesAdapter(games);
+    GamesAdapter gamesAdapter;
     List<AuthUI.IdpConfig> providers;
     FirebaseUser user = null;
     // Views
     ProgressBar progressBar;
+    FirebaseFirestore db;
     // Double click prevention
     private long mLastClickTime = 0;
     // Firebase
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Init views
         progressBar = findViewById(R.id.progressBar);
@@ -88,10 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
         rvGames.setLayoutManager(new LinearLayoutManager(this));
         games = new ArrayList<>();
-        final GamesAdapter gamesAdapter = new GamesAdapter(games);
+        gamesAdapter = new GamesAdapter(games);
         rvGames.setAdapter(gamesAdapter);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("games").limit(50).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -156,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // GET USER
                 user = mAuth.getCurrentUser();
-                UserService.getInstance().setUser(user);
+                UserService.getInstance().setFirebaseUser(user);
                 // SHOW EMAIL
                 Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
                 afterSignIn();
@@ -171,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 openGame(data.getStringExtra("game_id"), this);
+            }
+        }
+        if (requestCode == CREATE_USER_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                openGame(data.getStringExtra("game_id"), this);
+            } else if (resultCode == RESULT_CANCELED){
+                finish();
             }
         }
 
@@ -188,6 +199,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void afterSignIn() {
+        final Context context = this;
+        db.collection("users").whereEqualTo("userId", user.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<User> users = task.getResult().toObjects(User.class);
+                    if (users.size() == 0) {
+                        startActivityForResult(new Intent(context, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
+                    } else {
+
+                        UserService.getInstance().setAppUser(users.get(0));
+                    }
+                } else {
+                    Log.d("prueba", "onComplete: Fallo Garrafal");
+                }
+            }
+        });
         // Set RecycleView
         setRecycleView();
     }
