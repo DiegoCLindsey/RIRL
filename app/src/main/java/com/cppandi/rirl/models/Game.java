@@ -1,15 +1,6 @@
 package com.cppandi.rirl.models;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +14,15 @@ public class Game {
     private List<String> character_ids;
     private Location creation_location;
     private List<GameLocation> locations;
+    private Integer max_characters;
+    private String master_name;
 
-    public Game(String master_id, String title, GameState state, Date creation_date, Date finish_date, List<String> character_ids, Location creation_location, List<GameLocation> locations) {
+
+    // Constructors
+
+
+    public Game(String id, String master_id, String title, GameState state, Date creation_date, Date finish_date, List<String> character_ids, Location creation_location, List<GameLocation> locations, Integer max_characters, String master_name) {
+        this.id = id;
         this.master_id = master_id;
         this.title = title;
         this.state = state;
@@ -33,14 +31,47 @@ public class Game {
         this.character_ids = character_ids;
         this.creation_location = creation_location;
         this.locations = locations;
+        this.max_characters = max_characters;
+        this.master_name = master_name;
     }
 
     public Game() {
+        this.character_ids = new ArrayList<>();
+        this.locations = new ArrayList<>();
+        this.state = GameState.PREPARING;
+        this.creation_date = new Date();
     }
 
-    public Game(String title){
+    public Game(String title) {
         this.title = title;
     }
+
+    // Auto Getter and Setters
+
+    public String getMaster_name() {
+        return master_name;
+    }
+
+    public void setMaster_name(String master_name) {
+        this.master_name = master_name;
+    }
+
+    public List<String> getCharacter_ids() {
+        return character_ids;
+    }
+
+    public void setCharacter_ids(List<String> character_ids) {
+        this.character_ids = character_ids;
+    }
+
+    public Integer getMax_characters() {
+        return max_characters;
+    }
+
+    public void setMax_characters(Integer max_characters) {
+        this.max_characters = max_characters;
+    }
+
 
     public String getId() {
         return id;
@@ -59,7 +90,7 @@ public class Game {
     }
 
     public String getTitle() {
-        return title;
+        return title != null ? title : "";
     }
 
     public void setTitle(String title) {
@@ -90,14 +121,6 @@ public class Game {
         this.finish_date = finish_date;
     }
 
-    public List<String> getCharacters() {
-        return character_ids;
-    }
-
-    public void setCharacters(List<String> character_ids) {
-        this.character_ids = character_ids;
-    }
-
     public Location getCreation_location() {
         return creation_location;
     }
@@ -112,6 +135,16 @@ public class Game {
 
     public void setLocations(List<GameLocation> locations) {
         this.locations = locations;
+    }
+
+    // Remaining getters
+
+    public Integer getLengthCharacters() {
+        return getCharacter_ids() != null ? getCharacter_ids().size() : 0;
+    }
+
+    public String getLocationName() {
+        return getCreation_location() != null ? getCreation_location().getTitle() : "";
     }
 // TODO private List<Event> events;
 

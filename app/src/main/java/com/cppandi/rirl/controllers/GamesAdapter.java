@@ -46,8 +46,10 @@ public class GamesAdapter extends
         Game game = mGames.get(position);
 
         // Set item views based on your views and data model
-        TextView textView = viewHolder.personName;
-        textView.setText(game.getTitle());
+        viewHolder.titleGame.setText(game.getTitle());
+        viewHolder.adminName.setText(game.getTitle());
+        viewHolder.locationName.setText(game.getLocationName());
+        viewHolder.playersCount.setText(game.getLengthCharacters() + "/" + game.getMax_characters());
     }
 
     // Returns the total count of items in the list
@@ -62,7 +64,10 @@ public class GamesAdapter extends
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         LinearLayout itemGame;
-        TextView personName;
+        TextView titleGame;
+        TextView adminName;
+        TextView locationName;
+        TextView playersCount;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -72,7 +77,10 @@ public class GamesAdapter extends
             super(itemView);
 
             itemGame = itemView.findViewById(R.id.item_game_layout);
-            personName = itemView.findViewById(R.id.contact_name);
+            titleGame = itemView.findViewById(R.id.title);
+            adminName = itemView.findViewById(R.id.admin_name);
+            locationName = itemView.findViewById(R.id.locationName);
+            playersCount = itemView.findViewById(R.id.playersCount);
 
             itemView.setClickable(true);
         }
