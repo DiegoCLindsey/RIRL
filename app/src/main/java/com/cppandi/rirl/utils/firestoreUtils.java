@@ -8,8 +8,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+<<<<<<< Updated upstream
 public final class firestoreUtils {
     public static void sendObject(Object o, String path) {
+=======
+public class firestoreUtils {
+    public static void sendObject(Object o,String path){
+>>>>>>> Stashed changes
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(path).add(o).addOnCompleteListener(
                 new OnCompleteListener<DocumentReference>() {

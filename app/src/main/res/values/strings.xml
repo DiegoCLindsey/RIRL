@@ -24,7 +24,7 @@
     <string name="GameName">Nombre de la partida</string>
     <string name="password">Contraseña</string>
     <string name="cpassword">Confirmar contraseña</string>
-    <string name="maxplayers">Número máximo de jugadores [1~10]</string>
+    <string name="maxplayers">Número máximo de jugadores</string>
     <string name="send">Enviar</string>
     <string name="title_activity_main">RIRL</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
