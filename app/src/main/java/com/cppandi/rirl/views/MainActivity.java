@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FirebaseApp.initializeApp(this);
@@ -179,8 +179,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == CREATE_USER_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                openGame(data.getStringExtra("game_id"), this);
-            } else if (resultCode == RESULT_CANCELED){
+            } else {
                 finish();
             }
         }

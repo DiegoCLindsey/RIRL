@@ -29,4 +29,6 @@
     <string name="title_activity_main">RIRL</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="userNamePlaceholder">Username</string>
+    <string name="createUserButton">Enviar</string>
 </resources>
