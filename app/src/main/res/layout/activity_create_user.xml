@@ -41,6 +41,8 @@
                     android:id="@+id/userNameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                    android:inputType="textFilter"
                     android:hint="@string/userNamePlaceholder" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
