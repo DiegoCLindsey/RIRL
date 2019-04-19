@@ -9,14 +9,7 @@ import android.view.View;
 
 import com.cppandi.rirl.R;
 
-<<<<<<< Updated upstream:app/src/main/java/com/cppandi/rirl/views/NewGameFormActivity.java
 public class NewGameFormActivity extends AppCompatActivity {
-=======
-import java.util.ArrayList;
-import java.util.List;
-
-public class NewGameForm extends AppCompatActivity {
->>>>>>> Stashed changes:app/src/main/java/com/cppandi/rirl/views/NewGameForm.java
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +25,5 @@ public class NewGameForm extends AppCompatActivity {
         onBackPressed();
         return true;
     }
-
 
 }

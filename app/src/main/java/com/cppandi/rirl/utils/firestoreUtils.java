@@ -8,25 +8,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-<<<<<<< Updated upstream
 public final class firestoreUtils {
     public static void sendObject(Object o, String path) {
-=======
-public class firestoreUtils {
-    public static void sendObject(Object o,String path){
->>>>>>> Stashed changes
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(path).add(o).addOnCompleteListener(
-                new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("OK", "Archivo subido con éxito");
-                        } else {
-                            Log.d("ERROR", "Error al subir el objeto", task.getException());
-                        }
-                    }
-                }
-        );
     }
 }
