@@ -158,11 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-                // GET USER
-                user = mAuth.getCurrentUser();
-                UserService.getInstance().setFirebaseUser(user);
-                // SHOW EMAIL
-                Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
                 afterSignIn();
             } else {
                 if (response != null) {
@@ -198,6 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void afterSignIn() {
+        // GET USER
+        user = mAuth.getCurrentUser();
+        UserService.getInstance().setFirebaseUser(user);
+
+        // SHOW EMAIL
+        Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
+
+        // SEARCH APP USER
         final Context context = this;
         db.collection("users").whereEqualTo("userId", user.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
