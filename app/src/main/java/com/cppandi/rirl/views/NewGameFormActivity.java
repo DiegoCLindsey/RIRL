@@ -3,11 +3,22 @@ package com.cppandi.rirl.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.cppandi.rirl.R;
+
+import static com.cppandi.rirl.R.color.common_google_signin_btn_text_dark_default;
+import static com.cppandi.rirl.R.color.common_google_signin_btn_text_dark_focused;
 
 public class NewGameFormActivity extends AppCompatActivity {
 
@@ -18,12 +29,134 @@ public class NewGameFormActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setButtonListeners();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+
+    private void setButtonListeners() {
+        Button sendNGForm = findViewById(R.id.newGameFormSendButton);
+        sendNGForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateFormData();
+            }
+        });
+
+        final Switch privateParty = findViewById(R.id.switchPrivate);
+        privateParty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                EditText gPass = findViewById(R.id.newGameFormPassword);
+                TextInputLayout gPassTIL = findViewById(R.id.newGameFormPasswordTIL);
+                if(!isChecked){
+                    gPassTIL.setVisibility(View.GONE);
+                    gPass.setVisibility(View.GONE);
+                    gPass.setText("");
+                    privateParty.setTextColor(getResources().getColor(R.color.common_google_signin_btn_text_dark_disabled));
+                    gPassTIL.setError(null);
+                }else{
+                    privateParty.setTextColor(getResources().getColor(R.color.common_google_signin_btn_text_dark_focused));
+                    gPassTIL.setVisibility(View.VISIBLE);
+                    gPass.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    // AUXILIAR
+
+    private void validateFormData(){
+        // Validate Game Name
+        EditText gName = findViewById(R.id.newGameFormGameName);
+        TextInputLayout gNameTIL = findViewById(R.id.newGameFormGameNameTIL);
+        String gameName = gName.getText().toString();
+        int lenName = gameName.length();
+        if(lenName == 0){
+            gNameTIL.setError("¡Debes escribir un nombre para la partida!");
+        }else if(lenName < 5){
+            gNameTIL.setError("El nombre es demasiado corto");
+        }else if(lenName > 20){
+            gNameTIL.setError("El nombre es demasiado largo");
+        }else{
+            gNameTIL.setError(null);
+        }
+
+        // Validate Game Password
+        EditText gPass = findViewById(R.id.newGameFormPassword);
+        TextInputLayout gPassTIL = findViewById(R.id.newGameFormPasswordTIL);
+        String gamePass = gPass.getText().toString();
+        int lenPass = gamePass.length();
+        if(gPass.getVisibility()==View.VISIBLE){
+            checkPassword(gamePass,gPassTIL);
+        }
+
+        // Validate Number of players
+        EditText gMPs = findViewById(R.id.newGameFormMaxPlayers);
+        TextInputLayout gMPsTIL = findViewById(R.id.newGameFormMaxPlayersTIL);
+        String gPlys = gMPs.getText().toString();
+        Log.d("Número de jugadores: ",gPlys);
+        try{
+            Integer gamePlayers = new Integer(gPlys);
+            if(gamePlayers > 20) {
+                gMPsTIL.setError("¡Esos son muchos jugadores!");
+            }else if(gamePlayers == 0){
+                gMPsTIL.setError("El juego debe permitir al menos un jugador");
+            }else{
+                gMPsTIL.setError(null);
+            }
+        }catch (Exception e){
+            gMPsTIL.setError("El juego debe permitir al menos un jugador");
+        }
+
+    }
+
+    private void checkPassword(String s,TextInputLayout target){
+        boolean hasNumber = false;
+        boolean hasSymbol = false;
+
+        if(s.length()< 8){
+            target.setError("La contraseña debe tener al menos 8 caracteres");
+        }else if(s.length() > 20){
+            target.setError("La contraseña no debe tener más de 20 caracteres");
+        }else{
+            Character c = ' ';
+            for(int i = 0; i<s.length(); i++){
+                c = s.charAt(i);
+
+                if(Character.isDigit(c)){
+                    hasNumber = true;
+                }
+                if(!Character.isLetterOrDigit(c)){
+                    hasSymbol = true;
+                }
+            }
+
+            if (!(hasNumber&&hasSymbol)){
+                String err = "La contraseña debe contener al menos un";
+                String err1 = "";
+                String err2 = "";
+                if(!hasNumber){
+                    err1 += " número";
+                }
+                if(!hasSymbol) {
+                    if (err1 != "") {
+                        err2 += " y un";
+                    }
+                    err2 += " símbolo.";
+                }
+
+                target.setError(err+err1+err2);
+            }else{
+                target.setError(null);
+            }
+        }
+
     }
 
 }

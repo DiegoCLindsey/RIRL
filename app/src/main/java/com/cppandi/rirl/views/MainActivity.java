@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 16526;
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
-    private static final int CREATE_USER_REQUEST_CODE = 51614;
+    private static final int CREATE_USER_REQUEST_CODE = 5161
+            ;
 
     ArrayList<Game> games;
     GamesAdapter gamesAdapter;
