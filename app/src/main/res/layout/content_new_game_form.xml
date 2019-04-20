@@ -97,5 +97,12 @@
             android:layout_gravity="center"
             android:padding="15dp"
             android:text="@string/send" />
+
+        <ProgressBar
+            android:id="@+id/newGameProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>
