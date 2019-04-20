@@ -1,9 +1,14 @@
 package com.cppandi.rirl.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
 public class Character {
     private String id;
-    private String gameId;
+    private DocumentReference user;
     private String name;
+
+    public Character() {
+    }
 
     public String getId() {
         return id;
@@ -13,12 +18,12 @@ public class Character {
         this.id = id;
     }
 
-    public String getUser_id() {
-        return gameId;
+    public DocumentReference getUser() {
+        return user;
     }
 
-    public void setUser_id(String game_id) {
-        this.gameId = game_id;
+    public void setUser(DocumentReference user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -29,11 +34,4 @@ public class Character {
         this.name = name;
     }
 
-    public Character(String gameId, String name) {
-        this.gameId = gameId;
-        this.name = name;
-    }
-
-    public Character() {
-    }
 }
