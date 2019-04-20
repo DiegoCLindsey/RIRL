@@ -65,16 +65,7 @@ public class NewGameFormActivity extends AppCompatActivity {
         sendNGForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateFormData();
-                boolean valid = true;
-                for (EditText editText : formGroup) {
-                    if (editText.getError() != null) {
-                        valid = false;
-                        break;
-                    }
-                }
-                Log.d("prueba", "onClick: " + valid);
-                if (valid) {
+                if (validateFormData()) {
                     final Game game = new Game();
                     game.setPassword(gPass.getText().toString());
                     game.setTitle(gName.getText().toString());
@@ -120,17 +111,22 @@ public class NewGameFormActivity extends AppCompatActivity {
 
     // AUXILIAR
 
-    private void validateFormData() {
+    private boolean validateFormData() {
+        boolean valid = true;
+
         // Validate Game Name
         gName = findViewById(R.id.newGameFormGameName);
         TextInputLayout gNameTIL = findViewById(R.id.newGameFormGameNameTIL);
         String gameName = gName.getText().toString();
         int lenName = gameName.length();
         if (lenName == 0) {
+            valid = false;
             gNameTIL.setError("¡Debes escribir un nombre para la partida!");
         } else if (lenName < 5) {
+            valid = false;
             gNameTIL.setError("El nombre es demasiado corto");
         } else if (lenName > 20) {
+            valid = false;
             gNameTIL.setError("El nombre es demasiado largo");
         } else {
             gNameTIL.setError(null);
@@ -139,9 +135,8 @@ public class NewGameFormActivity extends AppCompatActivity {
         // Validate Game Password
         TextInputLayout gPassTIL = findViewById(R.id.newGameFormPasswordTIL);
         String gamePass = gPass.getText().toString();
-        int lenPass = gamePass.length();
         if (gPass.getVisibility() == View.VISIBLE) {
-            checkPassword(gamePass, gPassTIL);
+            valid = checkPassword(gamePass, gPassTIL);
         }
 
         // Validate Number of players
@@ -149,30 +144,37 @@ public class NewGameFormActivity extends AppCompatActivity {
         String gPlys = gMPs.getText().toString();
         Log.d("Número de jugadores: ", gPlys);
         try {
-            Integer gamePlayers = new Integer(gPlys);
+            int gamePlayers = Integer.valueOf(gPlys);
             if (gamePlayers > 20) {
                 gMPsTIL.setError("¡Esos son muchos jugadores!");
+                valid = false;
             } else if (gamePlayers == 0) {
                 gMPsTIL.setError("El juego debe permitir al menos un jugador");
+                valid = false;
             } else {
                 gMPsTIL.setError(null);
             }
         } catch (Exception e) {
             gMPsTIL.setError("El juego debe permitir al menos un jugador");
+            valid = false;
         }
+        return valid;
 
     }
 
-    private void checkPassword(String s, TextInputLayout target) {
+    private boolean checkPassword(String s, TextInputLayout target) {
+        boolean valid = true;
         boolean hasNumber = false;
         boolean hasSymbol = false;
 
         if (s.length() < 8) {
             target.setError("La contraseña debe tener al menos 8 caracteres");
+            valid = false;
         } else if (s.length() > 20) {
             target.setError("La contraseña no debe tener más de 20 caracteres");
+            valid = false;
         } else {
-            Character c = ' ';
+            char c = ' ';
             for (int i = 0; i < s.length(); i++) {
                 c = s.charAt(i);
 
@@ -197,13 +199,13 @@ public class NewGameFormActivity extends AppCompatActivity {
                     }
                     err2 += " símbolo.";
                 }
-
+                valid = false;
                 target.setError(err + err1 + err2);
             } else {
                 target.setError(null);
             }
         }
-
+        return valid;
     }
 
 }
