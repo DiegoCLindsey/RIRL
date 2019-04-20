@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.cppandi.rirl.R;
@@ -28,6 +29,8 @@ public class NewGameFormActivity extends AppCompatActivity {
     EditText gPass;
     EditText gName;
     EditText gMPs;
+    Button sendNGForm;
+    ProgressBar progressBar;
     ArrayList<EditText> formGroup;
 
     @Override
@@ -43,6 +46,8 @@ public class NewGameFormActivity extends AppCompatActivity {
         gPass = findViewById(R.id.newGameFormPassword);
         gName = findViewById(R.id.newGameFormGameName);
         gMPs = findViewById(R.id.newGameFormMaxPlayers);
+        sendNGForm = findViewById(R.id.newGameFormSendButton);
+        progressBar = findViewById(R.id.newGameProgressBar);
 
         formGroup = new ArrayList<>();
         formGroup.add(gPass);
@@ -61,11 +66,12 @@ public class NewGameFormActivity extends AppCompatActivity {
 
 
     private void setButtonListeners() {
-        Button sendNGForm = findViewById(R.id.newGameFormSendButton);
         sendNGForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateFormData()) {
+                    sendNGForm.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
                     final Game game = new Game();
                     game.setPassword(gPass.getText().toString());
                     game.setTitle(gName.getText().toString());
