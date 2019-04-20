@@ -12,28 +12,11 @@ public class Game {
     private Date creationDate;
     private Date finishDate;
     private List<String> characterIds;
-    private Location creation_location;
+    private Location creationLocation;
     private List<GameLocation> locations;
     private Integer maxCharacters;
     private String masterName;
-
-
-    // Constructors
-
-
-    public Game(String id, String masterId, String title, GameState state, Date creationDate, Date finishDate, List<String> characterIds, Location creation_location, List<GameLocation> locations, Integer maxCharacters, String masterName) {
-        this.id = id;
-        this.masterId = masterId;
-        this.title = title;
-        this.state = state;
-        this.creationDate = creationDate;
-        this.finishDate = finishDate;
-        this.characterIds = characterIds;
-        this.creation_location = creation_location;
-        this.locations = locations;
-        this.maxCharacters = maxCharacters;
-        this.masterName = masterName;
-    }
+    private String password;
 
     public Game() {
         this.characterIds = new ArrayList<>();
@@ -44,6 +27,17 @@ public class Game {
 
     public Game(String title) {
         this.title = title;
+    }
+
+
+    // Constructors
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     // Auto Getter and Setters
@@ -121,12 +115,12 @@ public class Game {
         this.finishDate = finishDate;
     }
 
-    public Location getCreation_location() {
-        return creation_location;
+    public Location getCreationLocation() {
+        return creationLocation;
     }
 
-    public void setCreation_location(Location creation_location) {
-        this.creation_location = creation_location;
+    public void setCreationLocation(Location creationLocation) {
+        this.creationLocation = creationLocation;
     }
 
     public List<GameLocation> getLocations() {
@@ -144,7 +138,7 @@ public class Game {
     }
 
     public String getLocationName() {
-        return getCreation_location() != null ? getCreation_location().getTitle() : "";
+        return getCreationLocation() != null ? getCreationLocation().getTitle() : "";
     }
 // TODO private List<Event> events;
 

@@ -1,8 +1,12 @@
 package com.cppandi.rirl.models;
 
-class GameLocation extends Location {
+public class GameLocation extends Location {
     private GameLocationType type;
     private Float radius;
+
+    public GameLocation() {
+        super();
+    }
 
     public GameLocation(Float lat, Float lang, String title, GameLocationType type, Float radius) {
         super(lat, lang, title);
