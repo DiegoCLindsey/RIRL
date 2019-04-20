@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int SIGN_IN_REQUEST_CODE = 16526;
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
-    private static final int CREATE_USER_REQUEST_CODE = 5161
-            ;
+    private static final int CREATE_USER_REQUEST_CODE = 5161;
 
     ArrayList<Game> games;
     GamesAdapter gamesAdapter;
@@ -203,24 +203,20 @@ public class MainActivity extends AppCompatActivity {
 
         // SEARCH APP USER
         final Context context = this;
-        db.collection("users").whereEqualTo("userId", user.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("users").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<User> users = task.getResult().toObjects(User.class);
-                    if (users.size() == 0) {
-                        startActivityForResult(new Intent(context, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
-                    } else {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    User user = task.getResult().toObject(User.class);
+                    UserService.getInstance().setAppUser(user);
 
-                        UserService.getInstance().setAppUser(users.get(0));
-                    }
                 } else {
-                    Log.d("prueba", "onComplete: Fallo Garrafal");
+                    startActivityForResult(new Intent(context, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
                 }
+                // Set RecycleView
+                setRecycleView();
             }
         });
-        // Set RecycleView
-        setRecycleView();
     }
 
     private void openGame(String game, Context context) {

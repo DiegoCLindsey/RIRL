@@ -1,6 +1,5 @@
 package com.cppandi.rirl.views;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,9 +15,8 @@ import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.User;
 import com.cppandi.rirl.utils.Constants;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CreateUserActivity extends AppCompatActivity {
@@ -27,6 +25,7 @@ public class CreateUserActivity extends AppCompatActivity {
     TextInputEditText userNameInput;
     UserService userService;
     ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,20 +47,20 @@ public class CreateUserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 sendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
-                final User auxUser = new User(userService.getFirebaseUser().getUid(), userNameInput.getText().toString());
-                FirebaseFirestore.getInstance().collection("users").add(
-                        auxUser).
-                addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                final User auxUser = new User(userNameInput.getText().toString());
+                userService.getDocumentReference().set(
+                        auxUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            userService.setAppUser(auxUser);
-                            setResult(RESULT_OK);
-                            finish();
-                        } else {
-                            setResult(Constants.RESULT_FAILED);
-                            finish();
-                        }
+                    public void onSuccess(Void aVoid) {
+                        userService.setAppUser(auxUser);
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        setResult(Constants.RESULT_FAILED);
+                        finish();
                     }
                 });
             }

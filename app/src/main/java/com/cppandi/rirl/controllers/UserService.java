@@ -2,6 +2,8 @@ package com.cppandi.rirl.controllers;
 
 import com.cppandi.rirl.models.User;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserService {
     private static UserService sSoleInstance;
@@ -34,5 +36,9 @@ public class UserService {
 
     public void setAppUser(User appUser) {
         this.appUser = appUser;
+    }
+
+    public DocumentReference getDocumentReference() {
+        return FirebaseFirestore.getInstance().collection("users").document(firebaseUser.getUid());
     }
 }

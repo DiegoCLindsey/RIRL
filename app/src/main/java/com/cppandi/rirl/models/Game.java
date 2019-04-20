@@ -1,17 +1,19 @@
 package com.cppandi.rirl.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Game {
     private String id;
-    private String masterId;
+    private DocumentReference master;
     private String title;
     private GameState state;
     private Date creationDate;
     private Date finishDate;
-    private List<String> characterIds;
+    private List<DocumentReference> characters;
     private Location creationLocation;
     private List<GameLocation> locations;
     private Integer maxCharacters;
@@ -19,14 +21,10 @@ public class Game {
     private String password;
 
     public Game() {
-        this.characterIds = new ArrayList<>();
+        this.characters = new ArrayList<>();
         this.locations = new ArrayList<>();
         this.state = GameState.PREPARING;
         this.creationDate = new Date();
-    }
-
-    public Game(String title) {
-        this.title = title;
     }
 
 
@@ -50,12 +48,12 @@ public class Game {
         this.masterName = masterName;
     }
 
-    public List<String> getCharacterIds() {
-        return characterIds;
+    public List<DocumentReference> getCharacters() {
+        return characters;
     }
 
-    public void setCharacterIds(List<String> characterIds) {
-        this.characterIds = characterIds;
+    public void setCharacters(List<DocumentReference> characters) {
+        this.characters = characters;
     }
 
     public Integer getMaxCharacters() {
@@ -75,12 +73,12 @@ public class Game {
         this.id = id;
     }
 
-    public String getMasterId() {
-        return masterId;
+    public DocumentReference getMaster() {
+        return master;
     }
 
-    public void setMasterId(String masterId) {
-        this.masterId = masterId;
+    public void setMaster(DocumentReference master) {
+        this.master = master;
     }
 
     public String getTitle() {
@@ -134,7 +132,7 @@ public class Game {
     // Remaining getters
 
     public Integer getLengthCharacters() {
-        return getCharacterIds() != null ? getCharacterIds().size() : 0;
+        return getCharacters() != null ? getCharacters().size() : 0;
     }
 
     public String getLocationName() {

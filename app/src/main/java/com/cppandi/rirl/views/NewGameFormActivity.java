@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.cppandi.rirl.R;
+import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
-import com.cppandi.rirl.models.GameLocation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -79,6 +79,7 @@ public class NewGameFormActivity extends AppCompatActivity {
                     game.setPassword(gPass.getText().toString());
                     game.setTitle(gName.getText().toString());
                     game.setMaxCharacters(Integer.parseInt(gMPs.getText().toString()));
+                    game.setMaster(UserService.getInstance().getDocumentReference());
                     FirebaseFirestore.getInstance().collection("games").add(game).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {

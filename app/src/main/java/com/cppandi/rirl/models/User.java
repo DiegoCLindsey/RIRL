@@ -1,23 +1,13 @@
 package com.cppandi.rirl.models;
 
 public class User {
-    private String userId;
     private String userName;
 
     public User() {
     }
 
-    public User(String userId, String userName) {
-        this.userId = userId;
+    public User(String userName) {
         this.userName = userName;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -27,4 +17,5 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
 }
