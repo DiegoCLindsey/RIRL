@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,6 +51,10 @@ public class GamesAdapter extends
         viewHolder.adminName.setText(game.getMasterName());
         viewHolder.locationName.setText(game.getLocationName());
         viewHolder.playersCount.setText(game.getLengthCharacters() + "/" + game.getMaxCharacters());
+        if(game.getPassword() != ""){
+            viewHolder.key.setVisibility(View.VISIBLE);
+        }
+
     }
 
     // Returns the total count of items in the list
@@ -68,6 +73,7 @@ public class GamesAdapter extends
         TextView adminName;
         TextView locationName;
         TextView playersCount;
+        ImageView key;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -81,6 +87,7 @@ public class GamesAdapter extends
             adminName = itemView.findViewById(R.id.admin_name);
             locationName = itemView.findViewById(R.id.locationName);
             playersCount = itemView.findViewById(R.id.playersCount);
+            key = itemView.findViewById(R.id.private_party_icon);
 
             itemView.setClickable(true);
         }

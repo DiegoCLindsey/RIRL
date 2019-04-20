@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_game_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -34,6 +35,13 @@
                 android:layout_weight="1"
                 android:text="admin_name" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/private_party_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_vpn_key_black_24dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
