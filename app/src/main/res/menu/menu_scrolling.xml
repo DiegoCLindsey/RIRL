@@ -14,4 +14,10 @@
         android:id="@+id/logout_button"
         android:title="@string/logout"
         app:showAsAction="never" />
+    <item
+        android:orderInCategory="101"
+        android:id="@+id/create_user_button"
+        android:title="DEBUG - NEW USER FORM"
+        app:showAsAction="never"
+        />
 </menu>

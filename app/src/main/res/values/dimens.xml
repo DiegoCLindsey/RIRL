@@ -8,11 +8,5 @@
     <item name="buttons" format="float" type="dimen">0.3</item>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <!--Validación de formularios-->
-    <item name="min_pass_sz" format="integer" type="integer">8</item>
-    <item name="max_pass_sz" format="integer" type="integer">20</item>
-    <item name="min_game_name" format="integer" type="integer">5</item>
-    <item name="max_game_name" format="integer" type="integer">20</item>
-    <item name="max_users" format="integer" type="integer">8</item>
 
 </resources>

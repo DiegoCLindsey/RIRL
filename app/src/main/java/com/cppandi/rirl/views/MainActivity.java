@@ -277,6 +277,12 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signOut();
                 showSignInOptions();
                 return true;
+
+            // ELIMINAR ESTE BOTÓN
+            case R.id.create_user_button:
+                startActivityForResult(new Intent(this, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
