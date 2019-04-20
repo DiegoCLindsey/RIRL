@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,6 +20,8 @@ import com.cppandi.rirl.utils.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import static com.cppandi.rirl.R.id.userNameInput;
 
 public class CreateUserActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
@@ -37,7 +41,6 @@ public class CreateUserActivity extends AppCompatActivity {
         // Actions - Buttons
         sendButton = findViewById(R.id.sendButton);
         setButtonListeners();
-        userNameInput = findViewById(R.id.userNameInput);
         progressBar = findViewById(R.id.userProgressBar);
     }
 
@@ -45,24 +48,28 @@ public class CreateUserActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendButton.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-                final User auxUser = new User(userNameInput.getText().toString());
-                userService.getDocumentReference().set(
-                        auxUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        userService.setAppUser(auxUser);
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        setResult(Constants.RESULT_FAILED);
-                        finish();
-                    }
-                });
+                userNameInput = findViewById(R.id.userNameInput);
+
+                if(validateFormData()) {
+                    final User auxUser = new User(userNameInput.getText().toString());
+                    sendButton.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    userService.getDocumentReference().set(
+                            auxUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            userService.setAppUser(auxUser);
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            setResult(Constants.RESULT_FAILED);
+                            finish();
+                        }
+                    });
+                }
             }
         });
     }
@@ -85,6 +92,32 @@ public class CreateUserActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+    }
+
+    private boolean validateFormData() {
+        boolean valid = true;
+
+        // Validate User Name
+        TextInputLayout nameTIL = findViewById(R.id.userNameInputTIL);
+
+        String user = userNameInput.getText().toString();
+        int lenName = user.length();
+
+        if (lenName == 0) {
+            valid = false;
+            nameTIL.setError("¡Debes escribir un nombre!");
+        } else if (lenName < Constants.NAME_SZ_MIN) {
+            valid = false;
+            nameTIL.setError("El nombre es demasiado corto");
+        } else if (lenName > Constants.NAME_SZ_MAX) {
+            valid = false;
+            nameTIL.setError("El nombre es demasiado largo");
+        } else {
+            nameTIL.setError(null);
+        }
+
+        return valid;
+
     }
 
 }

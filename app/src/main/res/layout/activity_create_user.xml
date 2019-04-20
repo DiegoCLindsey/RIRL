@@ -34,6 +34,8 @@
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/userNameInputTIL"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

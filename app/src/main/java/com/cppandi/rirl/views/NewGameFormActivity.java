@@ -17,6 +17,7 @@ import android.widget.Switch;
 import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -127,13 +128,13 @@ public class NewGameFormActivity extends AppCompatActivity {
         int lenName = gameName.length();
         if (lenName == 0) {
             valid = false;
-            gNameTIL.setError("¡Debes escribir un nombre para la partida!");
-        } else if (lenName < 5) {
+            gNameTIL.setError(Constants.ERR_NO_NAME);
+        } else if (lenName < Constants.NAME_SZ_MIN) {
             valid = false;
-            gNameTIL.setError("El nombre es demasiado corto");
-        } else if (lenName > 20) {
+            gNameTIL.setError(Constants.ERR_NAME_MIN);
+        } else if (lenName > Constants.NAME_SZ_MAX) {
             valid = false;
-            gNameTIL.setError("El nombre es demasiado largo");
+            gNameTIL.setError(Constants.ERR_NAME_MAX);
         } else {
             gNameTIL.setError(null);
         }
@@ -142,26 +143,26 @@ public class NewGameFormActivity extends AppCompatActivity {
         TextInputLayout gPassTIL = findViewById(R.id.newGameFormPasswordTIL);
         String gamePass = gPass.getText().toString();
         if (gPass.getVisibility() == View.VISIBLE) {
-            valid = checkPassword(gamePass, gPassTIL);
+            Boolean pass = checkPassword(gamePass, gPassTIL);
+            valid = valid && pass;
         }
 
         // Validate Number of players
         TextInputLayout gMPsTIL = findViewById(R.id.newGameFormMaxPlayersTIL);
         String gPlys = gMPs.getText().toString();
-        Log.d("Número de jugadores: ", gPlys);
         try {
             int gamePlayers = Integer.valueOf(gPlys);
-            if (gamePlayers > 20) {
-                gMPsTIL.setError("¡Esos son muchos jugadores!");
+            if (gamePlayers > Constants.PLAYER_CNT_MAX) {
+                gMPsTIL.setError(Constants.ERR_PLAYER_CNT_MAX);
                 valid = false;
             } else if (gamePlayers == 0) {
-                gMPsTIL.setError("El juego debe permitir al menos un jugador");
+                gMPsTIL.setError(Constants.ERR_NO_PLAYERS);
                 valid = false;
             } else {
                 gMPsTIL.setError(null);
             }
         } catch (Exception e) {
-            gMPsTIL.setError("El juego debe permitir al menos un jugador");
+            gMPsTIL.setError(Constants.ERR_NO_PLAYERS);
             valid = false;
         }
         return valid;
@@ -173,11 +174,11 @@ public class NewGameFormActivity extends AppCompatActivity {
         boolean hasNumber = false;
         boolean hasSymbol = false;
 
-        if (s.length() < 8) {
-            target.setError("La contraseña debe tener al menos 8 caracteres");
+        if (s.length() < Constants.PASS_SZ_MIN) {
+            target.setError(Constants.ERR_PASS_SZ_MIN);
             valid = false;
-        } else if (s.length() > 20) {
-            target.setError("La contraseña no debe tener más de 20 caracteres");
+        } else if (s.length() > Constants.PASS_SZ_MAX) {
+            target.setError(Constants.ERR_PASS_SZ_MAX);
             valid = false;
         } else {
             char c = ' ';
