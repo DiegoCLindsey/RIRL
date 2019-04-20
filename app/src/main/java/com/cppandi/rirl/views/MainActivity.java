@@ -104,10 +104,19 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.GONE);
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Game game = document.toObject(Game.class);
+                                final Game game = document.toObject(Game.class);
                                 game.setId(document.getId());
-                                games.add(game);
-                                gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
+                                game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            game.setMasterName(task.getResult().toObject(User.class).getUserName());
+                                            games.add(game);
+                                            gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
+
+                                        }
+                                    }
+                                });
 
                             }
                         } else {
