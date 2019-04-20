@@ -122,10 +122,10 @@ public class NewGameFormActivity extends AppCompatActivity {
         if (lenName == 0) {
             valid = false;
             gNameTIL.setError("¡Debes escribir un nombre para la partida!");
-        } else if (lenName < 5) {
+        } else if (lenName < R.integer.min_game_name) {
             valid = false;
             gNameTIL.setError("El nombre es demasiado corto");
-        } else if (lenName > 20) {
+        } else if (lenName > R.integer.max_game_name) {
             valid = false;
             gNameTIL.setError("El nombre es demasiado largo");
         } else {
@@ -145,7 +145,7 @@ public class NewGameFormActivity extends AppCompatActivity {
         Log.d("Número de jugadores: ", gPlys);
         try {
             int gamePlayers = Integer.valueOf(gPlys);
-            if (gamePlayers > 20) {
+            if (gamePlayers > R.integer.max_users) {
                 gMPsTIL.setError("¡Esos son muchos jugadores!");
                 valid = false;
             } else if (gamePlayers == 0) {
@@ -167,10 +167,10 @@ public class NewGameFormActivity extends AppCompatActivity {
         boolean hasNumber = false;
         boolean hasSymbol = false;
 
-        if (s.length() < 8) {
+        if (s.length() < R.integer.min_pass_sz) {
             target.setError("La contraseña debe tener al menos 8 caracteres");
             valid = false;
-        } else if (s.length() > 20) {
+        } else if (s.length() > R.integer.max_pass_sz) {
             target.setError("La contraseña no debe tener más de 20 caracteres");
             valid = false;
         } else {
