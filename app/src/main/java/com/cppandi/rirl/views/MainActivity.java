@@ -179,7 +179,33 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                openGame(data.getStringExtra("game_id"), this);
+                String game_id = data.getStringExtra("game_id");
+                db.collection("games").document(game_id).get().addOnCompleteListener(
+                        new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    progressBar.setVisibility(View.GONE);
+                                    final Game game = task.getResult().toObject(Game.class);
+                                    game.setId(task.getResult().getId());
+                                    game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                game.setMasterName(task.getResult().toObject(User.class).getUserName());
+                                                games.add(game);
+                                                gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
+
+                                            }
+
+                                        }
+                                    });
+                                } else {
+                                    Log.d("prueba", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+                openGame(game_id, this);
             }
         }
         if (requestCode == CREATE_USER_REQUEST_CODE) {
