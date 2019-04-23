@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openGame(String game, Context context) {
-        Intent intent = new Intent(context, MapsActivity.class);
+        Intent intent = new Intent(context, NewGameMapsActivity.class);
         Bundle extras = new Bundle();
         extras.putString("game_id", game);
         intent.putExtras(extras);
