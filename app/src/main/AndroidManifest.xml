@@ -22,6 +22,8 @@
         <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_main"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +33,14 @@
         </activity>
         <activity
             android:name=".views.NewGameMapsActivity"
-            android:label="@string/title_activity_maps2" />
+            android:label="@string/title_activity_maps2"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".views.NewGameFormActivity"
             android:label="@string/title_activity_new_game_form"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
     </application>
 
