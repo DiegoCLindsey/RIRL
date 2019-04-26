@@ -106,6 +106,12 @@
                     android:text="@string/privateParty"
                     android:textColor="@color/common_google_signin_btn_text_dark_disabled" />
 
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="331dp" />
+
             </LinearLayout>
 
             <Button

@@ -8,12 +8,6 @@ public class GameLocation extends Location {
         super();
     }
 
-    public GameLocation(Float lat, Float lang, String title, GameLocationType type, Float radius) {
-        super(lat, lang, title);
-        this.type = type;
-        this.radius = radius;
-    }
-
     public GameLocationType getType() {
         return type;
     }

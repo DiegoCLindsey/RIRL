@@ -1,38 +1,59 @@
 package com.cppandi.rirl.views;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.models.GameLocation;
 import com.cppandi.rirl.utils.Constants;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NewGameFormActivity extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 41242;
     EditText gPass;
     EditText gName;
     EditText gMPs;
     Button sendNGForm;
     ProgressBar progressBar;
     ArrayList<EditText> formGroup;
+    GoogleMap mMap;
+    AlertDialog.Builder dialogBuilder;
+    List<GameLocation> locations;
+    List<Marker> markers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +62,8 @@ public class NewGameFormActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        locations = new ArrayList<>();
+        markers = new ArrayList<>();
         // Get Views
 
         gPass = findViewById(R.id.newGameFormPassword);
@@ -56,7 +78,110 @@ public class NewGameFormActivity extends AppCompatActivity {
         formGroup.add(gMPs);
 
         setButtonListeners();
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        final Context context = this;
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                if (ActivityCompat.checkSelfPermission(context,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
+                    if (!checkGPSPermissions()) {
+                        Toast.makeText(context, "No Permisos", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    initMap();
+                }
 
+            }
+        });
+
+    }
+
+    private boolean checkGPSPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) { // Marshmallow
+
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initMap();
+            } else { // if permission is not granted
+
+                // decide what you want to do if you don't get permissions
+            }
+        }
+    }
+
+    private void initMap() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        final Context context = this;
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                Marker marker = mMap.addMarker(markerOptions);
+                markers.add(marker);
+                GameLocation location = new GameLocation();
+                location.setLatLong(latLng);
+                locations.add(location);
+                showMarkerDialog(markers.size() - 1);
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                showMarkerDialog(markers.indexOf(marker));
+                return false;
+            }
+        });
+    }
+
+    private void showMarkerDialog(final int position) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setMessage("Crear Localización");
+        View mView = getLayoutInflater().inflate(R.layout.marker_dialog, null);
+        dialogBuilder.setView(mView);
+        final AlertDialog dialog = dialogBuilder.create();
+        final TextInputEditText markerTextView = mView.findViewById(R.id.markerTextView);
+        Button saveButton = mView.findViewById(R.id.saveButton);
+        Button removeButton = mView.findViewById(R.id.removeButton);
+
+
+        markerTextView.setText(markers.get(position).getTitle());
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markers.get(position).setTitle(markerTextView.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markers.get(position).remove();
+                markers.remove(position);
+                locations.remove(position);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override
