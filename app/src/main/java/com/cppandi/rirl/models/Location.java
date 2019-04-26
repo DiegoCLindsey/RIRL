@@ -1,20 +1,27 @@
 package com.cppandi.rirl.models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 class Location {
-    private LatLng latLong;
+    private double latitude;
+    private double longitude;
     private String title;
 
     public Location() {
     }
 
-    public LatLng getLatLong() {
-        return latLong;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLatLong(LatLng latLong) {
-        this.latLong = latLong;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getTitle() {

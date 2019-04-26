@@ -26,9 +26,12 @@ import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
 import com.cppandi.rirl.models.GameLocation;
 import com.cppandi.rirl.utils.Constants;
+import com.cppandi.rirl.utils.LayoutUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -53,6 +56,7 @@ public class NewGameFormActivity extends AppCompatActivity {
     AlertDialog.Builder dialogBuilder;
     List<GameLocation> locations;
     List<Marker> markers;
+    List<Circle> circles;
 
 
     @Override
@@ -64,6 +68,7 @@ public class NewGameFormActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         locations = new ArrayList<>();
         markers = new ArrayList<>();
+        circles = new ArrayList<>();
         // Get Views
 
         gPass = findViewById(R.id.newGameFormPassword);
@@ -136,9 +141,12 @@ public class NewGameFormActivity extends AppCompatActivity {
             public void onMapLongClick(LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
                 Marker marker = mMap.addMarker(markerOptions);
+                Circle circle = mMap.addCircle(LayoutUtils.createDefaultCircleOptions(latLng));
                 markers.add(marker);
+                circles.add(circle);
                 GameLocation location = new GameLocation();
-                location.setLatLong(latLng);
+                location.setLatitude(latLng.latitude);
+                location.setLongitude(latLng.longitude);
                 locations.add(location);
                 showMarkerDialog(markers.size() - 1);
             }
@@ -162,20 +170,27 @@ public class NewGameFormActivity extends AppCompatActivity {
         Button saveButton = mView.findViewById(R.id.saveButton);
         Button removeButton = mView.findViewById(R.id.removeButton);
 
-
-        markerTextView.setText(markers.get(position).getTitle());
+        final Marker marker = markers.get(position);
+        final GameLocation location = locations.get(position);
+        final Circle circle = circles.get(position);
+        markerTextView.setText(marker.getTitle());
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markers.get(position).setTitle(markerTextView.getText().toString());
+                String title = markerTextView.getText().toString();
+                circle.setRadius(location.getRadius());
+                marker.setTitle(title);
+                location.setTitle(title);
                 dialog.dismiss();
             }
         });
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markers.get(position).remove();
+                marker.remove();
+                circle.remove();
+                circles.remove(position);
                 markers.remove(position);
                 locations.remove(position);
                 dialog.dismiss();
@@ -203,6 +218,7 @@ public class NewGameFormActivity extends AppCompatActivity {
                     game.setTitle(gName.getText().toString());
                     game.setMaxCharacters(Integer.parseInt(gMPs.getText().toString()));
                     game.setMaster(UserService.getInstance().getDocumentReference());
+                    game.setLocations(locations);
                     FirebaseFirestore.getInstance().collection("games").add(game).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {

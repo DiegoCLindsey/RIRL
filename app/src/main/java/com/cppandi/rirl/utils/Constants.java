@@ -2,6 +2,8 @@ package com.cppandi.rirl.utils;
 
 public class Constants {
 
+     /** NUMBERS **/
+
     // INTEGERS
     public static final int RESULT_FAILED = 2;
     public static final int NAME_SZ_MAX = 20;
@@ -10,6 +12,10 @@ public class Constants {
     public static final int PASS_SZ_MAX = 20;
     public static final int PLAYER_CNT_MAX = 20;
 
+    // DOUBLES
+    public static final double DEFAULT_RADIUS = 200;
+
+    /** TEXTS **/
     // STRINGS
     public static final String ERR_PASS_SZ_MIN = "La contraseña debe tener al menos 8 caracteres";
     public static final String ERR_PASS_SZ_MAX = "La contraseña no debe tener más de 20 caracteres";
