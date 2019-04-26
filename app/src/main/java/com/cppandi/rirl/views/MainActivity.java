@@ -2,6 +2,7 @@ package com.cppandi.rirl.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     // Views
     ProgressBar progressBar;
     FirebaseFirestore db;
+    FloatingActionButton newGameButton;
     // Double click prevention
     private long mLastClickTime = 0;
     // Firebase
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Init views
         progressBar = findViewById(R.id.progressBar);
+        newGameButton = findViewById(R.id.newGame);
+        newGameButton.setEnabled(false);
         // Init Providers
         providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -103,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.GONE);
+                            newGameButton.setEnabled(true);
+                            newGameButton.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccent));
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 final Game game = document.toObject(Game.class);
                                 game.setId(document.getId());
@@ -151,10 +157,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setButtonListeners() {
-        FloatingActionButton newGameButton = findViewById(R.id.newGame);
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 startActivityForResult(new Intent(v.getContext(), NewGameFormActivity.class), NEW_GAME_FORM_REQUEST_CODE);
             }
         });
