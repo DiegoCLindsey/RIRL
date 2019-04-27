@@ -2,7 +2,6 @@ package com.cppandi.rirl.views;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -197,13 +196,15 @@ public class MainActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     final Game game = task.getResult().toObject(Game.class);
                                     game.setId(task.getResult().getId());
+                                    games.add(game);
+                                    final int position = gamesAdapter.getItemCount();
+                                    gamesAdapter.notifyItemInserted(position);
                                     game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             if (task.isSuccessful()) {
                                                 game.setMasterName(task.getResult().toObject(User.class).getUserName());
-                                                games.add(game);
-                                                gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
+                                                gamesAdapter.notifyItemChanged(position);
 
                                             }
 
