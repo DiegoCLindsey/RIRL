@@ -32,4 +32,6 @@
     <string name="userNamePlaceholder">Username</string>
     <string name="createUserButton">Enviar</string>
     <string name="privateParty">Partida privada</string>
+    <string name="dungeon">Mazmorra</string>
+    <string name="tavern">Taberna</string>
 </resources>

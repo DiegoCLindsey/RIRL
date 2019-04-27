@@ -18,20 +18,22 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.cppandi.rirl.R;
+import com.cppandi.rirl.controllers.SpinnerAdapter;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
 import com.cppandi.rirl.models.GameLocation;
+import com.cppandi.rirl.models.GameLocationType;
 import com.cppandi.rirl.utils.Constants;
 import com.cppandi.rirl.utils.LayoutUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -169,6 +171,10 @@ public class NewGameFormActivity extends AppCompatActivity {
         final TextInputEditText markerTextView = mView.findViewById(R.id.markerTextView);
         Button saveButton = mView.findViewById(R.id.saveButton);
         Button removeButton = mView.findViewById(R.id.removeButton);
+        final Spinner spinner = mView.findViewById(R.id.spinner);
+
+        SpinnerAdapter adapter = new SpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, GameLocationType.values());
+        spinner.setAdapter(adapter);
 
         final Marker marker = markers.get(position);
         final GameLocation location = locations.get(position);
@@ -182,6 +188,7 @@ public class NewGameFormActivity extends AppCompatActivity {
                 circle.setRadius(location.getRadius());
                 marker.setTitle(title);
                 location.setTitle(title);
+                location.setType((GameLocationType) spinner.getSelectedItem());
                 dialog.dismiss();
             }
         });

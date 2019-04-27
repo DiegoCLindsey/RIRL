@@ -9,8 +9,8 @@ public final class LayoutUtils {
         return new CircleOptions().center(latLng)
                 .radius(radius)
                 .strokeWidth(3f)
-                .strokeColor(R.color.colorPrimaryDark)
-                .fillColor(R.color.colorPrimary);
+                .strokeColor(R.color.colorPrimary)
+                .fillColor(R.color.colorAccentEdit);
     }
 
     public static CircleOptions createDefaultCircleOptions(LatLng latLng) {

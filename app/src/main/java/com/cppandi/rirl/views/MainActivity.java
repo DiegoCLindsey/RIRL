@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.GONE);
                             newGameButton.setEnabled(true);
-                            newGameButton.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccent));
+                            // newGameButton.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccentEdit));
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 final Game game = document.toObject(Game.class);
                                 game.setId(document.getId());
