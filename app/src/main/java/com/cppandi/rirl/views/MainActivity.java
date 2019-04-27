@@ -1,5 +1,6 @@
 package com.cppandi.rirl.views;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.cppandi.rirl.R;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore db;
     FloatingActionButton newGameButton;
+    RecyclerView rvGames;
     // Double click prevention
     private long mLastClickTime = 0;
     // Firebase
@@ -92,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setRecycleView() {
-        final RecyclerView rvGames = findViewById(R.id.recycler_games);
-
+        rvGames = findViewById(R.id.recycler_games);
         rvGames.setLayoutManager(new LinearLayoutManager(this));
         games = new ArrayList<>();
         gamesAdapter = new GamesAdapter(games);
@@ -111,13 +113,15 @@ public class MainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 final Game game = document.toObject(Game.class);
                                 game.setId(document.getId());
+                                final int pos = gamesAdapter.getItemCount();
+                                games.add(game);
+                                gamesAdapter.notifyItemInserted(pos);
                                 game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             game.setMasterName(task.getResult().toObject(User.class).getUserName());
-                                            games.add(game);
-                                            gamesAdapter.notifyItemInserted(gamesAdapter.getItemCount());
+                                            gamesAdapter.notifyItemChanged(pos);
 
                                         }
                                     }
@@ -277,6 +281,27 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+
+        SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                gamesAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
         return true;
     }
 
