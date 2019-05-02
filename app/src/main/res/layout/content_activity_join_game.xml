@@ -5,13 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity_join_game"
+    tools:context=".controllers.UserService$activity_join_game"
     tools:showIn="@layout/activity_join_game">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Starring: " />
+
+        <ProgressBar
+            android:id="@+id/progressBar4"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="match_parent"
+            android:layout_height="401dp"
+            android:padding="100dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/recycler_view_item_1" />
+
+        <Button
+            android:id="@+id/joinGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unirse a la partida!" />
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

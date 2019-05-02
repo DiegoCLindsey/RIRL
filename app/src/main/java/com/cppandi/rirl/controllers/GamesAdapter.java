@@ -78,17 +78,7 @@ implements Filterable {
                 if (charString.isEmpty()) {
                     mGamesFiltered = mGames;
                 } else {
-                    List<Game> filteredList = new ArrayList<>();
-                    for (Game row : mGames) {
-
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
-                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getMasterName().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
-                        }
-                    }
-
-                    mGamesFiltered = filteredList;
+                    mGamesFiltered = filterList(charString);
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -102,6 +92,18 @@ implements Filterable {
                 notifyDataSetChanged();
             }
         };
+    }
+
+
+
+    private List<Game> filterList(String charString){
+        List<Game> filteredList = new ArrayList<>();
+        for (Game row : mGames) {
+            if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getMasterName().toLowerCase().contains(charString.toLowerCase())) {
+                filteredList.add(row);
+            }
+        }
+        return filteredList;
     }
 
     // Provide a direct reference to each of the views within a data item
