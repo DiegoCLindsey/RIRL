@@ -30,7 +30,6 @@ import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.GamesAdapter;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
-import com.cppandi.rirl.models.GameLocationType;
 import com.cppandi.rirl.models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
     private static final int CREATE_USER_REQUEST_CODE = 5161;
     private static final int PROFILE_REQUEST_CODE = 8263;
+    private static final int START_GAME_REQUEST_CODE = 2929;
 
     AlertDialog.Builder dialogBuilder;
     ArrayList<Game> games;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 mLastClickTime = SystemClock.elapsedRealtime();
                                 int pos = rvGames.getChildLayoutPosition(v);
-                                openGameAuth(games.get(pos).getId(), v.getContext(),games.get(pos).getPassword());
+                                joinGameAuth(games.get(pos).getId(),games.get(pos).getPassword());
                             }
 
                             @Override
@@ -203,24 +203,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SIGN_IN_REQUEST_CODE) {
+        switch(requestCode){
+            case SIGN_IN_REQUEST_CODE:
+                IdpResponse response = IdpResponse.fromResultIntent(data);
+                if (resultCode == RESULT_OK) {
+                    afterSignIn();
+                } else {
+                    if (response != null) {
+                        Toast.makeText(this, response.getError().getMessage(), Toast.LENGTH_LONG).show();
 
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if (resultCode == RESULT_OK) {
-                afterSignIn();
-            } else {
-                if (response != null) {
-                    Toast.makeText(this, response.getError().getMessage(), Toast.LENGTH_LONG).show();
-
+                    }
+                    showSignInOptions();
                 }
-                showSignInOptions();
-            }
-        }
-        if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                assert data != null;
-                String game_id = data.getStringExtra("game_id");
-                db.collection("games").document(game_id).get().addOnCompleteListener(
+                break;
+                
+            case NEW_GAME_FORM_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    assert data != null;
+                    String game_id = data.getStringExtra("game_id");
+                    db.collection("games").document(game_id).get().addOnCompleteListener(
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -247,16 +248,28 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                openGame(game_id, this);
-            }
-        }
-        if (requestCode == CREATE_USER_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-            } else {
-                finish();
-            }
-        }
+                    joinGame(game_id);
+                }
+                break;
+                
+            case CREATE_USER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                } else {
+                    finish();
+                }
+                break;
 
+            case START_GAME_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+
+                    assert data != null;
+                    String game_id = data.getStringExtra("game_id");
+                    startGame(game_id);
+
+                }else{
+                    finish();
+                }
+        }
     }
 
     private void showSignInOptions() {
@@ -296,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void openGameAuth(String game, Context context,String hasKey) {
+    private void joinGameAuth(String game, String hasKey) {
 
         if(hasKey != ""){
             dialogBuilder = new AlertDialog.Builder(this);
@@ -308,7 +321,6 @@ public class MainActivity extends AppCompatActivity {
 
             final String joinGame = game;
             final String joinPass = hasKey;
-            final Context joinContext = context;
 
             final TextView password = dialog.findViewById(R.id.passwordTextView);
 
@@ -320,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                     if(pass.equals(joinPass)){
                         dialog.dismiss();
                         password.setError(null);
-                        openGame(joinGame,joinContext);
+                        joinGame(joinGame);
                     }else{
                         password.setError("Contraseña incorrecta");
                     }
@@ -328,18 +340,26 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }else{
-            openGame(game,context);
+            joinGame(game);
         }
 
 
     }
 
-    private void openGame(String game, Context context){
-        Intent intent = new Intent(context, JoinGameActivity.class);
+    private void joinGame(String game){
+        Intent intent = new Intent(this, JoinGameActivity.class);
         Bundle extras = new Bundle();
         extras.putString("game_id", game);
         intent.putExtras(extras);
-        context.startActivity(intent);
+        startActivityForResult(intent,START_GAME_REQUEST_CODE);
+    }
+
+    private void startGame(String game){
+        Intent intent = new Intent(this, MainGameActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString("game_id", game);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
     // Set Menu
 
