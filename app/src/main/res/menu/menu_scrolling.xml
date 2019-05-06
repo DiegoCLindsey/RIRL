@@ -8,7 +8,7 @@
         android:orderInCategory="100"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:orderInCategory="101"
         android:id="@+id/logout_button"
