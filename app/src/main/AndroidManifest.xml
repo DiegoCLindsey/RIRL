@@ -13,6 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".views.ProfileActivity"></activity>
+        <activity android:name=".views.CreateUserActivity" />
         <activity
             android:name=".controllers.UserService$activity_join_game"
             android:label="@string/title_activity_join_game"

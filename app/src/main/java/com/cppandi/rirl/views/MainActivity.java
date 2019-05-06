@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SIGN_IN_REQUEST_CODE = 16526;
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
     private static final int CREATE_USER_REQUEST_CODE = 5161;
+    private static final int PROFILE_REQUEST_CODE = 8263;
 
     ArrayList<Game> games;
     GamesAdapter gamesAdapter;
@@ -58,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore db;
     FloatingActionButton newGameButton;
+    ImageView profileImage;
     RecyclerView rvGames;
+    boolean loading = true;
     // Double click prevention
     private long mLastClickTime = 0;
     // Firebase
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Init views
         progressBar = findViewById(R.id.progressBar);
+        profileImage = findViewById(R.id.profileImage);
         newGameButton = findViewById(R.id.newGame);
         newGameButton.setEnabled(false);
         // Init Providers
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.GONE);
+                            loading = false;
                             newGameButton.setEnabled(true);
                             // newGameButton.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccentEdit));
                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -170,6 +177,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(v.getContext(), NewGameFormActivity.class), NEW_GAME_FORM_REQUEST_CODE);
             }
         });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                if (!loading)
+                    startActivityForResult(new Intent(v.getContext(), ProfileActivity.class), PROFILE_REQUEST_CODE);
+            }
+        });
     }
 
     @Override
@@ -191,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == NEW_GAME_FORM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 String game_id = data.getStringExtra("game_id");
                 db.collection("games").document(game_id).get().addOnCompleteListener(
                         new OnCompleteListener<DocumentSnapshot>() {
@@ -255,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
         db.collection("users").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful() && task.getResult().exists()) {
+                if (task.isSuccessful() && Objects.requireNonNull(task.getResult()).exists()) {
                     User user = task.getResult().toObject(User.class);
                     UserService.getInstance().setAppUser(user);
 
@@ -328,10 +348,10 @@ public class MainActivity extends AppCompatActivity {
  * Needed Classes
  **/
 class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-    GestureDetector mGestureDetector;
+    private GestureDetector mGestureDetector;
     private OnItemClickListener mListener;
 
-    public RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
+    RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
         mListener = listener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -350,7 +370,7 @@ class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView view, @NonNull MotionEvent e) {
         View childView = view.findChildViewUnder(e.getX(), e.getY());
         if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
             mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
@@ -360,7 +380,7 @@ class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+    public void onTouchEvent(@NonNull RecyclerView view, @NonNull MotionEvent motionEvent) {
     }
 
     @Override
