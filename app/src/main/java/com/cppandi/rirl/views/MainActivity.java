@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +19,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.GamesAdapter;
 import com.cppandi.rirl.controllers.UserService;
 import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.models.GameLocationType;
 import com.cppandi.rirl.models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int NEW_GAME_FORM_REQUEST_CODE = 65165;
     private static final int CREATE_USER_REQUEST_CODE = 5161;
 
+    AlertDialog.Builder dialogBuilder;
     ArrayList<Game> games;
     GamesAdapter gamesAdapter;
     List<AuthUI.IdpConfig> providers;
@@ -73,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+
+
 
         // Init views
         progressBar = findViewById(R.id.progressBar);
@@ -147,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 mLastClickTime = SystemClock.elapsedRealtime();
                                 int pos = rvGames.getChildLayoutPosition(v);
-                                openGame(games.get(pos).getId(), v.getContext());
+                                openGameAuth(games.get(pos).getId(), v.getContext(),games.get(pos).getPassword());
                             }
 
                             @Override
@@ -268,8 +276,46 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void openGame(String game, Context context) {
-        Intent intent = new Intent(context, NewGameMapsActivity.class);
+    private void openGameAuth(String game, Context context,String hasKey) {
+
+        if(hasKey != ""){
+            dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setMessage("Introduzca la contraseña");
+            View mView = getLayoutInflater().inflate(R.layout.password_dialog, null);
+            dialogBuilder.setView(mView);
+            final AlertDialog dialog = dialogBuilder.create();
+            dialog.show();
+
+            final String joinGame = game;
+            final String joinPass = hasKey;
+            final Context joinContext = context;
+
+            final TextView password = dialog.findViewById(R.id.passwordTextView);
+
+            Button joinButton = mView.findViewById(R.id.password_enter_button);
+            joinButton.setOnClickListener(new  View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String pass = password.getText().toString();
+                    if(pass.equals(joinPass)){
+                        dialog.dismiss();
+                        password.setError(null);
+                        openGame(joinGame,joinContext);
+                    }else{
+                        password.setError("Contraseña incorrecta");
+                    }
+                }
+            });
+
+        }else{
+            openGame(game,context);
+        }
+
+
+    }
+
+    private void openGame(String game, Context context){
+        Intent intent = new Intent(context, JoinGameActivity.class);
         Bundle extras = new Bundle();
         extras.putString("game_id", game);
         intent.putExtras(extras);
@@ -317,7 +363,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.create_user_button:
                 startActivityForResult(new Intent(this, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
                 return true;
-
+            case R.id.test_ingame:
+                startActivityForResult(new Intent(this, JoinGameActivity.class), CREATE_USER_REQUEST_CODE);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -46,6 +46,11 @@
             android:label="@string/title_activity_new_game_form"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+        <activity android:name=".views.JoinGameActivity"
+            android:configChanges="orientation"
+            android:label="@string/joingame"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
     </application>
 
 </manifest>

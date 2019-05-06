@@ -15,9 +15,15 @@
         android:title="@string/logout"
         app:showAsAction="never" />
     <item
-        android:orderInCategory="101"
+        android:orderInCategory="102"
         android:id="@+id/create_user_button"
-        android:title="DEBUG - NEW USER FORM"
+        android:title=" DEBUG - NEW USER FORM"
+        app:showAsAction="never"
+        />
+    <item
+        android:orderInCategory="103"
+        android:id="@+id/test_ingame"
+        android:title=" DEBUG - ingame"
         app:showAsAction="never"
         />
 </menu>
