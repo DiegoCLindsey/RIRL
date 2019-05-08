@@ -52,8 +52,8 @@ public class MapGameFragment extends android.support.v4.app.Fragment {
         context = getActivity();
         gameService = GameService.getInstance();
         game = gameService.getGame();
-        if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
+            if (mapFragment == null) {
+                mapFragment = SupportMapFragment.newInstance();
             mapFragment.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
