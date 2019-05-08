@@ -2,12 +2,14 @@ package com.cppandi.rirl.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cppandi.rirl.R;
+import com.cppandi.rirl.controllers.GameService;
+import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.models.GameLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -15,18 +17,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapGameFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapGameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MapGameFragment extends android.support.v4.app.Fragment {
 
     private Context context;
     private SupportMapFragment mapFragment;
+    private GameService gameService;
+    private Game game;
 
     public MapGameFragment() {
         // Required empty public constructor
@@ -53,16 +50,22 @@ public class MapGameFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map_game, container, false);
         context = getActivity();
-
+        gameService = GameService.getInstance();
+        game = gameService.getGame();
         if (mapFragment == null) {
             mapFragment = SupportMapFragment.newInstance();
             mapFragment.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
-                    LatLng latLng = new LatLng(1.289545, 103.849972);
-                    googleMap.addMarker(new MarkerOptions().position(latLng)
-                            .title("Singapore"));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                    for (GameLocation location : game.getLocations()) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(latLng)
+                                .title(location.getTitle()));
+                    }
+                    GameLocation location = game.getLocations().get(0);
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
+
                 }
             });
         }
@@ -72,6 +75,4 @@ public class MapGameFragment extends android.support.v4.app.Fragment {
         return view;
 
     }
-
-
 }
