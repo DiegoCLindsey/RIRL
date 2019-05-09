@@ -13,7 +13,7 @@ public class Constants {
     public static final int PLAYER_CNT_MAX = 20;
 
     // DOUBLES
-    public static final double DEFAULT_RADIUS = 200;
+    public static final double DEFAULT_RADIUS = 50;
 
     /** TEXTS **/
     // STRINGS

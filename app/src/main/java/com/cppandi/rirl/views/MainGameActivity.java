@@ -23,7 +23,7 @@ public class MainGameActivity extends AppCompatActivity {
     final Fragment fragment2 = new MainGameFragment();
     final Fragment fragment3 = new InventoryGameFragment();
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment active = fragment1;
+    Fragment active = fragment2;
 
     BottomNavigationView navView;
 
