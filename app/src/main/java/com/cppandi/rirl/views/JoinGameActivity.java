@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cppandi.rirl.R;
+import com.cppandi.rirl.models.Game;
+import com.cppandi.rirl.utils.DBQuery;
 
 public class JoinGameActivity extends AppCompatActivity {
 
@@ -26,6 +28,10 @@ public class JoinGameActivity extends AppCompatActivity {
                 joinGame();
             }
         });
+
+        DBQuery<Game> gameQuery= new DBQuery<>(game,"games");
+        Game gameObject = gameQuery.getResponse();
+        joinGame.setText(gameObject.getTitle());
     }
 
     private void joinGame(){
