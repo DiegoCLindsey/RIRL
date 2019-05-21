@@ -9,10 +9,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-public class DBQuery<T> {
-    private Object response;
+public class DBQuery {
+    public DocumentSnapshot response;
 
     public DBQuery(String id,String collection){
+        this.response = null;
+
+        Log.d("log","INICIANDO QUERY");
         FirebaseFirestore.getInstance().collection(collection).document(id).get().addOnCompleteListener(
                 new OnCompleteListener<DocumentSnapshot>() {
 
@@ -20,18 +23,22 @@ public class DBQuery<T> {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                         if (task.isSuccessful()) {
-                            final Object res = task.getResult().toObject(Object.class);
+                            final DocumentSnapshot res = task.getResult();
                             response = res;
+                            Log.d("log","RESPUESTA RECIBIDA: "+response);
+                            onResponse();
 
                         } else {
                             Log.d("prueba", "Error getting documents: ", task.getException());
                         }
                     }
+
                 });
+
     }
 
-    public T getResponse(){
-        return (T) response;
+    public void onResponse(){
+
     }
 
 }

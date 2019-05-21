@@ -20,7 +20,7 @@
             android:text="Starring: " />
 
         <ProgressBar
-            android:id="@+id/progressBar4"
+            android:id="@+id/joinGameProgressBar"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
             android:layout_width="match_parent"
             android:layout_height="401dp"
