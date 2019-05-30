@@ -16,6 +16,8 @@ import com.cppandi.rirl.R;
 import com.cppandi.rirl.controllers.GameService;
 import com.cppandi.rirl.models.Game;
 import com.cppandi.rirl.models.GameLocation;
+import com.cppandi.rirl.models.GameLocationType;
+import com.cppandi.rirl.utils.LayoutUtils;
 import com.cppandi.rirl.views.MainGameActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -72,26 +74,7 @@ public class MapGameFragment extends android.support.v4.app.Fragment {
         locations = game.getLocations();
         markers = new ArrayList<>();
         if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
-            ;
-
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    mMap = googleMap;
-                    if (ActivityCompat.checkSelfPermission(context,
-                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                        if (!checkGPSPermissions()) {
-                            Toast.makeText(context, "No Permisos", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        initMap();
-                    }
-
-                }
-            });
+            setMap();
         }
 
         // R.id.map is a FrameLayout, not a Fragment
@@ -100,22 +83,55 @@ public class MapGameFragment extends android.support.v4.app.Fragment {
 
     }
 
+    private void setMap(){
+        mapFragment = SupportMapFragment.newInstance();
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                if (ActivityCompat.checkSelfPermission(context,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
+                    if (!checkGPSPermissions()) {
+                        Toast.makeText(context, "No Permisos", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    initMap();
+                }
+
+            }
+
+        });
+    }
+
     @SuppressLint("MissingPermission")
     private void initMap() {
         mMap.setMyLocationEnabled(true);
         for (GameLocation location : locations) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng)
-                    .title(location.getTitle()));
-            markers.add(marker);
-
-            mMap.addCircle(createDefaultCircleOptions(latLng, location.getRadius()));
+            addMarker(location,latLng);
         }
         GameLocation location = game.getLocations().get(0);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
 
     }
 
+    private void addMarker(GameLocation location, LatLng latLng){
+        MarkerOptions mOpts;
+
+        if(location.getType() == GameLocationType.DUNGEON){
+            mOpts = LayoutUtils.dungeonMarker(latLng,context);
+            mMap.addCircle(LayoutUtils.createDungeon(latLng));
+        }else{
+            mOpts = LayoutUtils.tavernMarker(latLng,context);
+            mMap.addCircle(LayoutUtils.createTavern(latLng));
+        }
+
+        Marker marker = mMap.addMarker(mOpts);
+        markers.add(marker);
+    }
     private boolean checkGPSPermissions() {
         if (Build.VERSION.SDK_INT >= 23) { // Marshmallow
 

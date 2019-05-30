@@ -114,63 +114,75 @@ public class MainActivity extends AppCompatActivity {
         gamesAdapter = new GamesAdapter(games);
         rvGames.setAdapter(gamesAdapter);
 
+        setRecycler();
 
+        setItemTouchListeners();
+    }
+
+    private void setRecycler(){
         db.collection("games").limit(50).get().addOnCompleteListener(
-                new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            progressBar.setVisibility(View.GONE);
-                            loading = false;
-                            newGameButton.setEnabled(true);
-                            // newGameButton.setBackgroundTintList(ColorStateList.valueOf(R.color.colorAccentEdit));
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                final Game game = document.toObject(Game.class);
-                                game.setId(document.getId());
-                                final int pos = gamesAdapter.getItemCount();
-                                games.add(game);
-                                gamesAdapter.notifyItemInserted(pos);
-                                game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            game.setMasterName(task.getResult().toObject(User.class).getUserName());
-                                            gamesAdapter.notifyItemChanged(pos);
+            new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
+                        loading = false;
+                        newGameButton.setEnabled(true);
 
-                                        }
-                                    }
-                                });
-
-                            }
-                        } else {
-                            Log.d("prueba", "Error getting documents: ", task.getException());
-                        }
+                        addGamesToRecycler(task.getResult());
+                    } else {
+                        Log.d("prueba", "Error getting documents: ", task.getException());
                     }
                 }
+            }
 
         );
+    }
+
+    private void addGamesToRecycler(QuerySnapshot result){
+        for (QueryDocumentSnapshot document : result) {
+            final Game game = document.toObject(Game.class);
+            game.setId(document.getId());
+            final int pos = gamesAdapter.getItemCount();
+            games.add(game);
+            gamesAdapter.notifyItemInserted(pos);
+            game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        game.setMasterName(task.getResult().toObject(User.class).getUserName());
+                        gamesAdapter.notifyItemChanged(pos);
+
+                    }
+                }
+            });
+
+        }
+    }
+
+    private void setItemTouchListeners(){
         rvGames.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, rvGames,
-                        new RecyclerItemClickListener.OnItemClickListener() {
+            new RecyclerItemClickListener(this, rvGames,
+                new RecyclerItemClickListener.OnItemClickListener() {
 
-                            @Override
-                            public void onItemClick(View v, int position) {
-                                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                                    return;
-                                }
-
-                                mLastClickTime = SystemClock.elapsedRealtime();
-                                int pos = rvGames.getChildLayoutPosition(v);
-                                joinGameAuth(games.get(pos).getId(),games.get(pos).getPassword());
-                            }
-
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-                                // do whatever
-                            }
-
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            return;
                         }
-                ));
+
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        int pos = rvGames.getChildLayoutPosition(v);
+                        joinGameAuth(games.get(pos).getId(),games.get(pos).getPassword());
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+
+                }
+            ));
     }
 
     private void setButtonListeners() {
@@ -220,37 +232,12 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     assert data != null;
                     String game_id = data.getStringExtra("game_id");
-                    db.collection("games").document(game_id).get().addOnCompleteListener(
-                        new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    progressBar.setVisibility(View.GONE);
-                                    final Game game = task.getResult().toObject(Game.class);
-                                    game.setId(task.getResult().getId());
-                                    games.add(game);
-                                    final int position = gamesAdapter.getItemCount();
-                                    gamesAdapter.notifyItemInserted(position);
-                                    game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                game.setMasterName(task.getResult().toObject(User.class).getUserName());
-                                                gamesAdapter.notifyItemChanged(position);
+                    getGame(game_id);
 
-                                            }
-
-                                        }
-                                    });
-                                } else {
-                                    Log.d("prueba", "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
                     joinGame(game_id);
+
+                    break;
                 }
-                break;
-                
             case CREATE_USER_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                 } else {
@@ -260,11 +247,9 @@ public class MainActivity extends AppCompatActivity {
 
             case START_GAME_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
-
                     assert data != null;
                     String game_id = data.getStringExtra("game_id");
                     startGame(game_id);
-
                 }else{
                     finish();
                 }
@@ -279,6 +264,36 @@ public class MainActivity extends AppCompatActivity {
                         .setTheme(R.style.SignInTheme)
                         .build()
                 , SIGN_IN_REQUEST_CODE);
+    }
+
+    private void getGame(String game_id){
+        db.collection("games").document(game_id).get().addOnCompleteListener(
+            new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
+                        final Game game = task.getResult().toObject(Game.class);
+                        game.setId(task.getResult().getId());
+                        games.add(game);
+                        final int position = gamesAdapter.getItemCount();
+                        gamesAdapter.notifyItemInserted(position);
+                        game.getMaster().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                game.setMasterName(task.getResult().toObject(User.class).getUserName());
+                                gamesAdapter.notifyItemChanged(position);
+
+                            }
+
+                            }
+                        });
+                    } else {
+                        Log.d("prueba", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
     }
 
 
@@ -351,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
         extras.putString("game_id", game);
         intent.putExtras(extras);
         startActivityForResult(intent,START_GAME_REQUEST_CODE);
+
     }
 
     private void startGame(String game){
@@ -402,9 +418,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.create_user_button:
                 startActivityForResult(new Intent(this, CreateUserActivity.class), CREATE_USER_REQUEST_CODE);
                 return true;
+
             case R.id.test_ingame:
                 startActivityForResult(new Intent(this, JoinGameActivity.class), CREATE_USER_REQUEST_CODE);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

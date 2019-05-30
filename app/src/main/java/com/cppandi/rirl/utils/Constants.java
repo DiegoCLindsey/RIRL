@@ -12,6 +12,11 @@ public class Constants {
     public static final int PASS_SZ_MAX = 20;
     public static final int PLAYER_CNT_MAX = 20;
 
+    // COLORES
+    public static final int mazmorra = 0x44FF8800;
+    public static final int taberna = 0x4488FF00;
+    public static final int opaque = 0xFF000000;
+
     // DOUBLES
     public static final double DEFAULT_RADIUS = 50;
 

@@ -2,9 +2,9 @@
 <resources>
     <color name="background">#AA4010</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#8BC34A</color>
-    <color name="colorPrimary">#9C27B0</color>
-    <color name="colorAccentEdit">#8BC34A</color>
-    <color name="colorPrimaryEdit">#9C27B0</color>
+    <color name="colorAccent">#DD9933</color>
+    <color name="colorPrimary">#AA4411</color>
+    <color name="colorAccentEdit">#DD9933</color>
+    <color name="colorPrimaryEdit">#AA4411</color>
     <color name="disabledColor">#757575</color>
 </resources>

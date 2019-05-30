@@ -49,7 +49,7 @@ public class JoinGameActivity extends AppCompatActivity {
                 // GAME LOADED, now:
 
                 // Check if current user is already in
-                if(false){ //checkUserInGame()
+                if(checkUserInGame()){
                     join();
                 }else{
                     // The game accepts more users, set button for join
@@ -66,8 +66,7 @@ public class JoinGameActivity extends AppCompatActivity {
                     // The game is full, sorry ¯\_(ツ)_/¯
                     }else{
                         Toast.makeText(context, "La partida está llena", Toast.LENGTH_LONG).show();
-                        setResult(RESULT_OK, new Intent());
-                        finish();
+                        exit();
                     }
                 }
 
@@ -109,6 +108,14 @@ public class JoinGameActivity extends AppCompatActivity {
         };
     }
 
+    private void exit(){
+        Bundle extras = new Bundle();
+        extras.putString("game_id", game);
+        Intent intent = new Intent();
+        intent.putExtras(extras);
+        setResult(RESULT_CANCELED, intent);
+        finish();
+    }
 
     private void join(){
             Intent intent = new Intent();

@@ -59,6 +59,7 @@ public class NewGameFormActivity extends AppCompatActivity {
     List<GameLocation> locations;
     List<Marker> markers;
     List<Circle> circles;
+    Context context;
 
 
     @Override
@@ -71,6 +72,7 @@ public class NewGameFormActivity extends AppCompatActivity {
         locations = new ArrayList<>();
         markers = new ArrayList<>();
         circles = new ArrayList<>();
+        context = this;
         // Get Views
 
         gPass = findViewById(R.id.newGameFormPassword);
@@ -141,11 +143,7 @@ public class NewGameFormActivity extends AppCompatActivity {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-                Marker marker = mMap.addMarker(markerOptions);
-                Circle circle = mMap.addCircle(LayoutUtils.createDefaultCircleOptions(latLng));
-                markers.add(marker);
-                circles.add(circle);
+                draw(latLng);
                 GameLocation location = new GameLocation();
                 location.setLatitude(latLng.latitude);
                 location.setLongitude(latLng.longitude);
@@ -160,6 +158,14 @@ public class NewGameFormActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void draw(LatLng latLng){
+        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
+        Circle circle = mMap.addCircle(LayoutUtils.createDefaultCircleOptions(latLng));
+        markers.add(marker);
+        circles.add(circle);
+
     }
 
     private void showMarkerDialog(final int position) {
