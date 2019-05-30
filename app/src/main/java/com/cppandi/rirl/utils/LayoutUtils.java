@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public final class LayoutUtils {
     public static CircleOptions createDefaultCircleOptions(LatLng latLng, double radius) {
+
         return new CircleOptions().center(latLng)
                 .radius(radius)
                 .strokeWidth(3f)

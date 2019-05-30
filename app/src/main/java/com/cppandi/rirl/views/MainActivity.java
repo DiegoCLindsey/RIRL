@@ -85,13 +85,12 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-
-
         // Init views
         progressBar = findViewById(R.id.progressBar);
         profileImage = findViewById(R.id.profileImage);
         newGameButton = findViewById(R.id.newGame);
         newGameButton.setEnabled(false);
+
         // Init Providers
         providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
